@@ -1,0 +1,104 @@
+[
+  {
+    "id": "paper-ball",
+    "name": "Bola de papel",
+    "correct": "azul",
+    "destino": "reciclar",
+    "options": ["reciclar", "incinerar"],
+    "tip": "Papel limpo é reciclável e vai na lixeira azul.",
+    "dubio": false
+  },
+  {
+    "id": "bottle",
+    "name": "Garrafa PET",
+    "correct": "vermelho",
+    "destino": "reciclar",
+    "options": ["reciclar", "aterro"],
+    "tip": "Garrafas PET são plástico: lixeira vermelha.",
+    "dubio": false
+  },
+  {
+    "id": "jar",
+    "name": "Pote de vidro",
+    "correct": "verde",
+    "destino": "reutilizar",
+    "options": ["reutilizar", "reciclar", "aterro"],
+    "tip": "Vidro vai na lixeira verde (cuidado se quebrar!).",
+    "dubio": false
+  },
+  {
+    "id": "can",
+    "name": "Lata de alumínio",
+    "correct": "amarelo",
+    "destino": "reciclar",
+    "options": ["reciclar", "incinerar"],
+    "tip": "Latas de alumínio são metal: lixeira amarela.",
+    "dubio": false
+  },
+  {
+    "id": "banana",
+    "name": "Casca de banana",
+    "correct": "marrom",
+    "destino": "compostar",
+    "options": ["compostar", "aterro", "incinerar"],
+    "tip": "Restos de comida são orgânicos: lixeira marrom (viram adubo!).",
+    "dubio": false
+  },
+  {
+    "id": "newspaper",
+    "name": "Jornal",
+    "correct": "azul",
+    "destino": "reciclar",
+    "options": ["reciclar", "incinerar"],
+    "tip": "Jornal é papel: lixeira azul.",
+    "dubio": false
+  },
+  {
+    "id": "cup",
+    "name": "Copo plástico",
+    "correct": "vermelho",
+    "destino": "reciclar",
+    "options": ["reciclar", "aterro"],
+    "tip": "Copos plásticos vão na lixeira vermelha.",
+    "dubio": false
+  },
+  {
+    "id": "greasy",
+    "name": "Papel engordurado",
+    "correct": "cinza",
+    "destino": "incinerar",
+    "options": ["incinerar", "aterro"],
+    "tip": "Papel sujo de gordura/comida NÃO recicla — é rejeito (lata cinza).",
+    "dubio": true,
+    "inspect": "Parece papel, mas gordura contamina a reciclagem — vai no rejeito!"
+  },
+  {
+    "id": "sponge",
+    "name": "Esponja usada",
+    "correct": "cinza",
+    "destino": "incinerar",
+    "options": ["incinerar", "aterro"],
+    "tip": "Esponja usada é rejeito: lata cinza. Não recicla — sobra incinerar ou aterro.",
+    "dubio": false
+  },
+  {
+    "id": "battery",
+    "name": "Pilha",
+    "correct": "laranja",
+    "destino": "logistica",
+    "options": ["logistica", "aterro"],
+    "tip": "Pilhas e baterias são PERIGOSAS: lixeira laranja, nunca no lixo comum (contaminam o solo).",
+    "dubio": true,
+    "inspect": "Parece metal, mas pilha é PERIGOSA — vai na laranja, não na amarela!"
+  },
+  {
+    "id": "spray",
+    "name": "Aerossol",
+    "correct": "laranja",
+    "destino": "logistica",
+    "options": ["logistica", "aterro"],
+    "tip": "Aerossóis/solventes são perigosos: lixeira laranja (podem explodir e contaminar).",
+    "dubio": true,
+    "inspect": "Parece lata de metal, mas é perigoso — vai na laranja!"
+  }
+]

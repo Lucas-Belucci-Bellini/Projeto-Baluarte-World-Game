@@ -1,0 +1,38 @@
+[
+  {
+    "id": "vida",
+    "nome": "Coração extra",
+    "icon": "❤️",
+    "desc": "Começa cada partida com +1 vida.",
+    "baseCost": 30,
+    "scale": 2.0,
+    "max": 2
+  },
+  {
+    "id": "credito",
+    "nome": "Luvas turbo",
+    "icon": "💰",
+    "desc": "+1 crédito por item processado.",
+    "baseCost": 20,
+    "scale": 1.8,
+    "max": 5
+  },
+  {
+    "id": "eco",
+    "nome": "Selo verde",
+    "icon": "🌱",
+    "desc": "+1 EcoPonto por destino realmente verde.",
+    "baseCost": 25,
+    "scale": 1.8,
+    "max": 5
+  },
+  {
+    "id": "dica",
+    "nome": "Óculos de inspeção",
+    "icon": "🔍",
+    "desc": "Marca o melhor destino no painel.",
+    "baseCost": 40,
+    "scale": 1.0,
+    "max": 1
+  }
+]

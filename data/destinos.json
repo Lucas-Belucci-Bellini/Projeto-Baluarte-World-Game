@@ -1,0 +1,9 @@
+{
+  "_comment": "Hierarquia do lixo (D-04). Reutilizar > Reciclar/Compostar > Incinerar > Aterro. Logística reversa é canal à parte (perigosos/eletrônicos). Incinerar e Aterro têm eco=0 por design pedagógico: queimar/aterrar nunca pode ser o caminho premiado.",
+  "reutilizar": { "name": "Reutilizar", "icon": "🔄", "color": "#1f9d8f", "credits": 5, "eco": 5, "tip": "O objeto volta a ser usado inteiro — a melhor opção de todas." },
+  "reciclar":   { "name": "Reciclar",   "icon": "♻️", "color": "#2f8f3f", "credits": 4, "eco": 4, "tip": "Vira matéria-prima nova. Ótimo destino." },
+  "compostar":  { "name": "Compostar",  "icon": "🌱", "color": "#7a9a2e", "credits": 4, "eco": 4, "tip": "Orgânico vira adubo para a terra." },
+  "incinerar":  { "name": "Incinerar",  "icon": "🔥", "color": "#e8842a", "credits": 2, "eco": 0, "tip": "Só recupera energia e desperdiça o material. Último recurso." },
+  "aterro":     { "name": "Aterro",     "icon": "⛰️", "color": "#8a8a8a", "credits": 1, "eco": 0, "tip": "Ocupa terreno e não aproveita nada. Evite ao máximo." },
+  "logistica":  { "name": "Devolver",   "icon": "↩️", "color": "#e8761b", "credits": 4, "eco": 5, "tip": "Logística reversa: volta ao fabricante para descarte seguro, sem contaminar o solo." }
+}

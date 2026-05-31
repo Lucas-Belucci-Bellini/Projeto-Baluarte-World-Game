@@ -1,0 +1,7 @@
+[
+  { "id": 1, "nome": "Pracinha",         "meta": 6 },
+  { "id": 2, "nome": "Rua do Bairro",    "meta": 8 },
+  { "id": 3, "nome": "Praça Central",    "meta": 10 },
+  { "id": 4, "nome": "Beira-Rio",        "meta": 12 },
+  { "id": 5, "nome": "Parque da Cidade", "meta": 14 }
+]

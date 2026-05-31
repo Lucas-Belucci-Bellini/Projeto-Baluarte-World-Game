@@ -1,0 +1,9 @@
+[
+  { "id": "azul",     "name": "Papel",     "ptColor": "AZUL",     "color": "#2b6cb0",   "darkColor": "#1f4e85",   "symbol": "recycle" },
+  { "id": "vermelho", "name": "Plástico",  "ptColor": "VERMELHA", "color": "#d23636",   "darkColor": "#962222",   "symbol": "recycle" },
+  { "id": "verde",    "name": "Vidro",     "ptColor": "VERDE",    "color": "#2f8f3f",   "darkColor": "#1f6428",   "symbol": "recycle" },
+  { "id": "amarelo",  "name": "Metal",     "ptColor": "AMARELA",  "color": "#f0b315",   "darkColor": "#b8830a",   "symbol": "recycle" },
+  { "id": "marrom",   "name": "Orgânico",  "ptColor": "MARROM",   "color": "#6a4326",   "darkColor": "#4a2d18",   "symbol": "recycle" },
+  { "id": "cinza",    "name": "Rejeito",   "ptColor": "CINZA",    "color": "#8a8f96",   "darkColor": "#5b6168",   "symbol": "rejeito" },
+  { "id": "laranja",  "name": "Perigoso",  "ptColor": "LARANJA",  "color": "#e8761b",   "darkColor": "#b4540c",   "symbol": "perigoso" }
+]

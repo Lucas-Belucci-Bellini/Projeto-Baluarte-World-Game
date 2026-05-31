@@ -1,0 +1,60 @@
+# ============================================================
+# .gitignore — Projeto-Baluarte-World-Game
+# ============================================================
+
+# --- Web (Vite): dependências e build ---
+node_modules/
+dist/
+.vite/
+*.local
+
+# --- Unreal Engine: pastas geradas pelo build ---
+unreal/**/Binaries/
+unreal/**/Build/
+unreal/**/DerivedDataCache/
+unreal/**/Intermediate/
+unreal/**/Saved/
+unreal/**/.vs/
+unreal/**/.vscode/
+unreal/**/.idea/
+
+# Arquivos de projeto Unreal gerados (mantemos só o .uproject)
+unreal/**/*.sln
+unreal/**/*.suo
+unreal/**/*.user
+unreal/**/*.opensdf
+unreal/**/*.sdf
+unreal/**/*.VC.db
+unreal/**/*.VC.opendb
+unreal/**/*.xcodeproj/
+unreal/**/*.xcworkspace/
+
+# --- Sistema operacional ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+*.swp
+*~
+
+# --- Editores ---
+.vscode/
+.idea/
+*.code-workspace
+
+# --- Logs e tmp ---
+*.log
+*.tmp
+*.bak
+
+# --- Arquivos grandes que não devem ir no Git ---
+# (use Git LFS se precisar versionar binários grandes)
+*.zip
+*.rar
+*.7z
+*.iso
+*.dmg
+
+# Exceções: o .gitignore deste projeto sempre vai
+!.gitignore
+!.gitkeep
