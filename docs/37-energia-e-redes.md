@@ -2,7 +2,7 @@
 
 ## Por que existe
 Máquinas (Era 2) e módulos (Era 3) precisam de energia. Gerir a rede é parte do
-desafio — e da lição (energia **limpa** vs. suja).
+desafio — e da consequência (energia **limpa** vs. suja).
 
 ## Modelo
 - **Geração**: solar, eólica, biogás (do orgânico!), e fontes sujas (penalizam
@@ -13,6 +13,6 @@ desafio — e da lição (energia **limpa** vs. suja).
 ## Água (Era 3)
 Modelo análogo para água: captação, uso urbano, reúso.
 
-## Regra educativa
+## Regra de consequência
 Fontes limpas rendem EcoPontos e felicidade urbana; sujas dão energia barata mas
 poluem. Ver [38](38-cidade-e-populacao.md).

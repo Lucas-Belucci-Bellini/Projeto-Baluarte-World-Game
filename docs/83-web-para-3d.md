@@ -12,7 +12,7 @@ Como uma Era pode "subir" de protótipo web para 3D sem jogar trabalho fora.
 
 ## Critério para migrar
 Só migra Era cuja **mecânica já fechou** na web e cujo valor 3D justifica o
-custo. Protótipo web continua válido (escola/sem instalar).
+custo. Protótipo web continua válido (roda no navegador, sem instalar).
 
 ## Verificação cruzada
 Web e 3D devem dar **a mesma pontuação** para a mesma sequência (como já exigimos

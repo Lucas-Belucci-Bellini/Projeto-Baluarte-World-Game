@@ -13,7 +13,7 @@
   `weapons.json`, `missions.json`, `biomes.json`.
 
 ## Invariantes
-Regras pedagógicas (hierarquia D-04, eco=0 em incinerar/aterro) são **validadas**
+Regras de consequência (hierarquia D-04, eco=0 em incinerar/aterro) são **validadas**
 em runtime e em teste (`src/engine/validate.js`). Novas tabelas ganham seus
 próprios invariantes.
 

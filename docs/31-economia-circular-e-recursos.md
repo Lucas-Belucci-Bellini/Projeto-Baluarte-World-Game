@@ -1,6 +1,6 @@
 # 31 — Economia circular e recursos
 
-O coração do jogo. A economia **ensina pela regra**.
+O coração do jogo. A economia **funciona pela regra (e vira consequência)**.
 
 ## Moedas
 - **Créditos (♻️)**: economia geral; compra upgrades/estruturas.

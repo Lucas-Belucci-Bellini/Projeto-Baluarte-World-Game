@@ -15,5 +15,5 @@ Visão única da ordem de construção. Detalhe por Era em [20](20-eras-visao-ge
 
 ## Regras do roadmap
 - Uma Era por vez; cada uma **fecha jogável**.
-- Era 0 (educacional) nunca regride.
+- Era 0 (semente) nunca regride.
 - Cada entrega: branch de versão + `main` atualizado (ver [91](91-versionamento-e-branches.md)).

@@ -63,9 +63,9 @@ aqui está o detalhe.
 - [53 — Linha do tempo e arcos](53-linha-do-tempo-e-arcos.md)
 - [54 — Missões, modos e finais](54-missoes-modos-e-finais.md)
 
-## Conteúdo educativo
-- [60 — Modo Escola e conteúdo educativo](60-modo-escola-e-conteudo-educativo.md)
-- [61 — Métricas de aprendizado](61-metricas-de-aprendizado.md)
+## Consequência e cooperação
+- [60 — Consequência e Segunda Chance](60-consequencia-e-segunda-chance.md)
+- [61 — Cooperativo (até 16) e comando de NPCs](61-cooperativo-e-comando-de-npcs.md)
 
 ## UX, arte e áudio
 - [70 — UI/UX e acessibilidade](70-ui-ux-e-acessibilidade.md)

@@ -1,140 +1,133 @@
 # 🌌 BLUEPRINT — Segunda Chance (a visão grande)
 
-> **Documento-norte** do Projeto-Baluarte-World-Game. Aqui mora a **visão de
-> longo prazo**: um jogo que junta as **ideias** de vários grandes títulos para
-> criar **algo novo** — partindo do lixo da Terra até uma civilização que não
-> repete o erro de se afogar no próprio desperdício.
+> **Documento-norte** do Projeto-Baluarte-World-Game. Um jogo **AAA** de
+> sobrevivência, construção e consequência, ambientado num sistema de **outra
+> galáxia**. Junta as **ideias** (nunca os arquivos) de vários grandes títulos
+> para criar algo novo.
 >
-> Isto é o **norte**, não o sprint. O que está jogável hoje (o jogo de
-> reciclagem em `src/`) é a **semente**. A gente cresce em direção a esta visão
-> em **fatias jogáveis**, uma de cada vez — sem prometer um AAA pra semana que
-> vem, e sem nunca quebrar o que já funciona.
+> **A função do jogo:** *cada ação sua decide se a humanidade terá — ou não — uma
+> segunda chance.*
 
 ---
 
 ## 1. Premissa
 
-A Terra está soterrada em lixo. Tarde demais para limpar tudo, cedo o bastante
-para não desistir: você é enviado a um **sistema estelar distante** com uma
-missão — **construir a segunda chance da humanidade**.
+A Terra ruiu sob a própria poluição e o descarte de lixo. Como último lance, uma
+expedição de **até 16 pessoas** é enviada a um sistema em **outra galáxia** com
+uma missão: **preparar o local para a humanidade recomeçar**.
 
-Você chega quase sem nada. O recurso que sobra é o que a humanidade sempre
-soube produzir: **sucata**. A virada é moral e mecânica ao mesmo tempo —
-**fechar o ciclo** (reutilizar → reciclar → fabricar) é o que faz a colônia
-crescer. Quem queima e aterra, estagna. Quem fecha o ciclo, prospera e, no
-fim, alcança as estrelas.
-
-> A lição é a mesma do jogo de triagem que já existe — só que agora ela move um
-> mundo inteiro.
+Vocês chegam quase sem nada, num mundo selvagem. O que sobra é o que a
+humanidade sempre soube produzir — **sucata**. A partir dela: sobreviver,
+construir, e provar que dá para recomeçar **sem repetir o erro**.
 
 ---
 
-## 2. ⚖️ Regra de ouro: **ideias, não arquivos**
+## 2. A função: peso e consequência
 
-Esta é inegociável e vem direto da sua orientação:
+Este **não é um jogo educativo**. É um jogo de **consequência**. Existe um
+**Índice da Segunda Chance** que cada ação empurra:
 
-- ✅ **Estudamos as ideias** dos jogos de referência (o que cada um faz bem) e
-  implementamos **do zero**, com código, arte, nomes e mundo **nossos**.
-- ❌ **Não copiamos** arquivos, assets, modelos, texturas, código, mapas, sons
-  ou nomes próprios desses jogos. Nada de `.pak`, ripagem, pacote extraído.
-- ✅ Arte e áudio são **autorais** ou com **licença compatível** (CC0/CC com
-  atribuição, ou Marketplace licenciado) — ver [`assets/README.md`](assets/README.md).
+- Fechar o ciclo, manter os colonos vivos, energia limpa → o recomeço fica viável.
+- Atalho sujo, bioma esgotado, gente perdida → o futuro encolhe — e o mundo
+  **cobra depois** (consequência tardia).
 
-> É assim que se faz um jogo "inspirado em" sem virar cópia: pega-se a
-> **mecânica/sensação** como referência e constrói-se uma identidade própria.
-> (O repo `Recycle-game` já tem um doc sobre isso: "referência limpa e limites".)
+O desfecho reflete isso (ver [docs/54](docs/54-missoes-modos-e-finais.md) e
+[docs/60](docs/60-consequencia-e-segunda-chance.md)). Pode ser **usado** na
+educação, mas a função é dramática, não didática.
 
 ---
 
-## 3. A síntese — o que há de **novo**
+## 3. Até 16 pessoas — co-op e solo
 
-Juntar nove jogos não é empilhar nove jogos. O que amarra tudo e é **nosso** é
-um único fio condutor:
+- **Co-op**: até **16 jogadores** dividem a colônia, cada um com funções.
+- **Solo**: você joga um personagem e **comanda os outros 15 como NPCs** —
+  atribuindo funções, posições e tarefas (camada de ordens estilo mil-sim).
 
-> **A sucata é o recurso central e o coração moral do jogo.**
-> Você não só sobrevive e constrói — você constrói **certo**, fechando o ciclo,
-> para que a segunda chance não afunde no lixo como a Terra afundou.
-
-A economia circular (que o jogo de reciclagem já ensina) vira o **DNA** que
-atravessa todas as camadas: sobreviver, automatizar, urbanizar, defender e
-decidir. Esse é o "algo novo" — nenhum dos nove faz disso o eixo.
-
-E o **universo Baluarte** entra como a camada de facção/personagens: as 26
-equipes de elite (ALFA→ZULU) são quem você comanda nas operações; a lore das
-Crônicas dá o pano de fundo. (É a ponte com o `Projeto-Baluarte`.)
+Ver [docs/61](docs/61-cooperativo-e-comando-de-npcs.md).
 
 ---
 
-## 4. Os 9 pilares (cada jogo → a ideia → como vira nosso)
+## 4. ⚖️ Regra de ouro: **ideias, não arquivos**
 
-| # | Referência | A **ideia** que pegamos | Como vira **nosso** |
-|---|-----------|--------------------------|----------------------|
-| 1 | **Satisfactory** | Automação e logística: esteiras, fábricas, cadeias de produção | **Cadeias de reciclagem**: sucata → matéria-prima → componentes → estruturas. Extensão direta da triagem. |
-| 2 | **Space Engineers** | Engenharia modular com física: estruturas, veículos, energia | **Construir com material reciclado**: bases, veículos e estações funcionais (energia, estrutura). |
-| 3 | **Cities Skylines** | Simulação urbana: zoneamento, população, serviços, fluxos | A colônia vira **cidade sustentável** — a anti-Terra: meta de lixo zero, energia limpa, ciclos fechados. |
-| 4 | **Subnautica** | Sobrevivência + exploração de mundo alienígena + deslumbramento | **Explorar os biomas** do sistema novo (terra e mar), coletar, craftar, sobreviver, descobrir. |
-| 5 | **Call of Duty** | Ação/FPS acessível: tiroteio gostoso, momentos marcantes | **Combate acessível** para defender a colônia — ritmo rápido, fácil de pegar. |
-| 6 | **Arma 3** | Mil-sim: tática realista, operações grandes, comando de esquadrão | **Operações táticas** e comando das equipes de elite (Baluarte) em missões de defesa/expedição. |
-| 7 | **Arma Reforger** | Mil-sim moderno + acessibilidade + editor/comunidade | Camada tática **mais acessível**, co-op e **editor de cenários**. |
-| 8 | **Ark** | Sobrevivência + domar criaturas + tribos + progressão | **Fauna alienígena**: domar/aliar-se a criaturas, progressão de sobrevivência, defesa de base. |
-| 9 | **Fallout 4** | RPG pós-apocalíptico + construir assentamento de sucata + escolhas | A **camada de RPG/narrativa** + construir de sucata + **escolhas** sobre que civilização criar. |
+Inegociável: estudamos **como** os jogos de referência fazem algo bem e
+implementamos **do zero**, com código, arte, nomes e mundo **nossos**. Nada de
+assets, modelos, sons, código, mapas ou marcas dos jogos originais. Arte/áudio
+**autorais** ou com licença compatível. Ver [docs/04](docs/04-regra-de-ouro-ideias-nao-arquivos.md).
 
 ---
 
-## 5. Da semente ao norte — as **Eras**
+## 5. A síntese — o que há de novo
 
-Cada Era é uma **fatia jogável e demonstrável**. Começamos no que já existe e
-crescemos. Nenhuma Era depende de "ter tudo pronto"; cada uma fecha sozinha.
+Juntar nove jogos não é empilhá-los. O fio condutor — e nosso — é:
 
-| Era | Nome | Pilares | Estado |
-|-----|------|---------|--------|
-| **0** | **Triagem** — economia circular na mão | (semente) | ✅ jogável (web, `src/`) |
-| **1** | **Pouso & Sobrevivência** — chegar, catar sucata, craftar, sobreviver | Subnautica · Ark · Fallout | ⏳ próxima fatia |
-| **2** | **Automação** — esteiras e fábricas processam o lixo em recursos | Satisfactory | 🔭 |
-| **3** | **Engenharia & Cidade** — estruturas, energia, a colônia vira cidade | Space Engineers · Cities Skylines | 🔭 |
-| **4** | **Defesa & Táticas** — combate e comando de esquadrão contra ameaças | CoD · Arma 3/Reforger · Ark | 🔭 |
-| **5** | **Civilização & Órbita** — escolhas, expansão, a segunda chance feita | Fallout · interplanetário | 🔭 |
+> **Sucata é o recurso central, e cada escolha pesa no futuro da espécie.**
+> Você sobrevive, automatiza, urbaniza e defende — e o jogo nunca esquece se você
+> fez isso **certo**.
 
-> A Era 0 é o jogo de reciclagem que já está aqui. A Era 1 é o próximo corte
-> realista. As demais são o caminho — desenhado, mas não prometido para amanhã.
+Survival, automação e citybuilder existem. Amarrar tudo a um **Índice da Segunda
+Chance**, com consequência tardia e um elenco de 16 colonos comandáveis, é a
+nossa marca.
 
 ---
 
-## 6. Como a gente constrói de verdade (realismo)
+## 6. Os 9 pilares (ideias que pegamos)
 
-Para isto não virar fantasia de gaveta:
+| # | Referência | A **ideia** | Vira nosso |
+|---|-----------|-------------|------------|
+| 1 | **Satisfactory** | Automação/logística | Cadeias que processam sucata |
+| 2 | **Space Engineers** | Engenharia modular | Construir de material reciclado |
+| 3 | **Cities Skylines** | Simulação urbana | Colônia → cidade viável |
+| 4 | **Subnautica** | Exploração/sobrevivência | Mundo alienígena por biomas |
+| 5 | **Call of Duty** | Ação/FPS | Combate para defender a colônia |
+| 6 | **Arma 3** | Mil-sim/comando | Comandar os 16 / esquadrões Baluarte |
+| 7 | **Arma Reforger** | Tática acessível + editor | Co-op e cenários compartilhados |
+| 8 | **Ark** | Criaturas/sobrevivência | Fauna alienígena aliável |
+| 9 | **Fallout 4** | RPG + assentamento + consequência | Construir de sucata + escolhas que pesam |
 
-1. **Fatias jogáveis web-first.** Cada Era começa como um protótipo pequeno na
-   stack atual (JS puro + Vite) — rápido de fazer, roda no navegador, todo
-   mundo testa. Quando a mecânica estiver certa, aí sim se pensa em 3D pesado.
-2. **O educacional continua shippável.** O jogo de triagem (Era 0) é a versão
-   que "abre na escola sem instalar" e não pode quebrar enquanto o resto cresce.
-3. **3D só quando fizer sentido.** A decisão D-03 (Unreal) vale para as Eras
-   mais pesadas (3, 4, 5) **se** recursos/arte aparecerem. Até lá, protótipo.
-4. **Dados fora do código.** Tudo dirigido por JSON (como o jogo já é), para
-   ajustar conteúdo sem reprogramar — e para um dia virar DataTables no 3D.
-5. **Ritmo solo + IA.** Uma fatia de cada vez, cada uma fechando um ciclo
-   "frustração → ação → alívio → ambição".
-
----
-
-## 7. Riscos e mitigação
-
-| Risco | Mitigação |
-|-------|-----------|
-| Escopo explode ("e se eu add...") | Este blueprint é o **filtro**. Cada ideia entra como Era/fatia, não tudo de uma vez. |
-| Virar cópia (legal) | **Regra de ouro** (§2): ideias, não arquivos. Arte/código nossos. |
-| Equipe de 1 pessoa | Cada Era é **independente e pequena**; nada exige "o jogo inteiro". |
-| Peso 3D / performance | Web-first; 3D só nas Eras pesadas e com teste cedo em hardware modesto. |
-| Perder o que funciona | Versionamento por branch + `main` atualizado (ver `README`/`ROADMAP`). |
+Detalhe em [docs/10–19](docs/10-pilares-visao-geral.md).
 
 ---
 
-## 8. Próximo passo concreto
+## 7. Conexão com o Baluarte
 
-A Era 0 está feita. A **Era 1 (Pouso & Sobrevivência)** é o próximo corte
-realista: um protótipo top-down web onde você **pousa, anda, cata sucata,
-craft­a algo simples e sobrevive** — reaproveitando a economia da triagem
-(a sucata coletada vira recurso). Pequeno, jogável, na stack atual.
+Os **16 especialistas** mapeiam nas equipes de elite ALFA→ZULU do
+`Projeto-Baluarte` (ver [docs/51](docs/51-faccoes-e-equipes-baluarte.md)). Mesma
+stack web (JS puro + Vite) nos protótipos → integra à plataforma. Ver
+[docs/07](docs/07-conexao-com-projeto-baluarte.md).
 
-> Quando quiser, a gente abre a Era 1 e eu monto o primeiro protótipo dela.
+---
+
+## 8. As Eras (fatias jogáveis, do atual ao norte)
+
+| Era | Nome | Estado |
+|-----|------|--------|
+| 0 | Triagem (a semente: processar sucata) | ✅ jogável (web) |
+| 1 | Pouso e sobrevivência | ⏳ próxima |
+| 2 | Automação | 🔭 |
+| 3 | Engenharia e cidade | 🔭 |
+| 4 | Defesa e táticas | 🔭 |
+| 5 | Civilização e órbita | 🔭 |
+
+Detalhe em [docs/20–26](docs/20-eras-visao-geral.md).
+
+---
+
+## 9. Como a gente constrói (alvo AAA, caminho realista)
+
+O **alvo é AAA**. Mas, com equipe pequena, chegamos lá por **fatias jogáveis**:
+
+1. **Protótipo web-first** para validar cada sistema rápido (a stack atual).
+2. Quando a mecânica fecha e o valor justifica, sobe para **3D (Unreal, D-03)**.
+3. **Dados fora do código** (JSON) → migram de graça para o 3D.
+4. **Versionamento de segurança**: cada versão vira branch + `main` atualizado
+   (ver [docs/91](docs/91-versionamento-e-branches.md)).
+
+> O protótipo não é o teto — é o andaime. O teto é o jogo AAA.
+
+---
+
+## 10. Próximo passo
+
+A **Era 1 (Pouso e Sobrevivência)** é a próxima fatia: pousar, explorar, catar
+sucata, craftar abrigo e sobreviver — com 1–3 colonos NPC comandáveis como
+semente do sistema de 16. Backlog em [docs/92](docs/92-backlog-inicial.md).

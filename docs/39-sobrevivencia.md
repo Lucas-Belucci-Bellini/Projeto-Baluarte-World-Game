@@ -1,7 +1,7 @@
 # 39 — Sobrevivência (Era 1)
 
 ## Ideia (pilares Subnautica/Ark, ver [14](14-pilar-subnautica.md), [18](18-pilar-ark.md))
-Tensão de manter-se vivo num mundo hostil — sem ser punitivo demais (é educativo).
+Tensão de manter-se vivo num mundo hostil — sem ser punitivo demais.
 
 ## Medidores
 - **Energia/Fome**: cai com o tempo/ação; reposta com comida (orgânico!).
@@ -12,6 +12,6 @@ Tensão de manter-se vivo num mundo hostil — sem ser punitivo demais (é educa
 Sem punição cruel: respawn na base com perda de progresso da expedição (itens
 soltos recuperáveis). Foco em aprender, não frustrar.
 
-## Laço educativo
+## Laço com o ciclo
 Comida vem do **orgânico compostado/cultivado**; abrigo vem de **sucata**. O
 ciclo sustenta a vida — literalmente. Ver [34](34-crafting-e-receitas.md).

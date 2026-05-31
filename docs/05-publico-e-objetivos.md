@@ -1,17 +1,20 @@
 # 05 — Público e objetivos
 
 ## Público
-- **Primário**: estudantes (escola) — o jogo nasceu educacional sobre reciclagem.
-- **Secundário**: jogadores de survival/automação/citybuilder que topam um jogo
-  com causa.
+- **Primário**: jogadores de **survival/automação/citybuilder/RPG** que topam um
+  jogo de mundo aberto com **peso narrativo** e co-op.
+- **Secundário**: quem curte mil-sim leve e comando de esquadrão.
+
+## Posicionamento
+Jogo **AAA** de sobrevivência+construção+consequência. **Pode** ser usado em
+contexto educacional (o tema é poluição/recomeço), mas **essa não é a função** —
+a função é dramática: você decide o futuro da espécie.
 
 ## Objetivos do produto
-1. **Ensinar economia circular** na prática (não por texto).
-2. **Ser divertido** o bastante para o aluno voltar.
-3. **Crescer em escopo** sem perder a versão "abre na escola sem instalar".
+1. **Fazer o jogador sentir o peso** de cada escolha (Índice da Segunda Chance).
+2. **Profundidade de sistemas** (sucata → indústria → cidade → defesa → legado).
+3. **Co-op até 16** e solo com comando de NPCs igualmente bons.
+4. **Crescer por fatias** sem quebrar o que já roda.
 
-## Objetivos de aprendizado (Era 0, já ativos)
-- Separar resíduos pelas 7 cores CONAMA.
-- Entender a hierarquia do lixo (D-04).
-- Reconhecer itens dúbios e perigosos (logística reversa).
-Ver [60 — Modo Escola](60-modo-escola-e-conteudo-educativo.md) e [61 — Métricas](61-metricas-de-aprendizado.md).
+## Não-objetivo
+Não é "jogo de cartilha". Sem modo escola, sem provas, sem lição por texto.

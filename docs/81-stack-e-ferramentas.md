@@ -10,7 +10,7 @@
 - Dados reaproveitados como DataTables (ver [82](82-dados-e-datatables.md)).
 
 ## Por quê
-Web-first dá protótipo rápido, joga no navegador (escola) e integra com o
+Web-first dá protótipo rápido, joga no navegador (sem instalar) e integra com o
 Baluarte. 3D só quando a mecânica fechar e o escopo justificar.
 
 ## Ferramentas de apoio

@@ -1,20 +1,25 @@
 # 02 — Fantasia central e tom
 
 ## A fantasia
-"Eu cheguei sem nada num mundo hostil e, peça a peça, fiz dele um lar — do jeito
-certo." O jogador sente **competência crescente** e **orgulho do ciclo fechado**.
+"Eu cheguei sem nada num mundo hostil, com 15 vidas sob meu comando e a espécie
+nas costas — e, peça a peça, construí o recomeço **do jeito certo**."
+
+## O peso
+A fantasia central não é só competência: é **responsabilidade**. Você sente que
+o que faz **importa** além da sessão — o mundo guarda as consequências (ver
+[60](60-consequencia-e-segunda-chance.md)).
 
 ## O loop emocional
-Frustração (mundo hostil, recursos escassos) → ação (catar, craftar, construir)
-→ alívio (a base funciona, a noite passou) → ambição (e se eu automatizar? e se
-virar cidade?). Ver [30 — Core loop](30-core-loop.md).
+Tensão (mundo hostil, recursos e vidas em risco) → ação (catar, craftar,
+construir, defender) → alívio (a colônia aguentou a noite) → peso (e o futuro?
+e o Índice?). Ver [30](30-core-loop.md).
 
 ## Tom por Era
-- Era 0–1: sobrevivência crua, sujeira, escassez.
-- Era 2–3: engenhosidade, orgulho industrial **limpo**.
+- Era 0–1: cru, sujo, escasso.
+- Era 2–3: engenhosidade e orgulho de construir limpo.
 - Era 4: tensão e defesa.
-- Era 5: grandeza, legado, escolha moral.
+- Era 5: grandeza e legado — o desfecho da espécie.
 
-## Pilar pedagógico do tom
-A lição **vem da regra**, não do sermão. O jogo nunca dá lição de moral por
-texto; ele faz o ciclo fechado **pagar mais**. Ver [31](31-economia-circular-e-recursos.md).
+## Regra
+A consequência **vem da regra do mundo**, não de sermão. O jogo nunca dá lição
+por texto; ele faz o mundo **reagir** às suas escolhas.

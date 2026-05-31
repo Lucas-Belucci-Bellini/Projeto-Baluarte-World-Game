@@ -1,19 +1,22 @@
 # 06 — Síntese: o que há de novo
 
 Juntar nove jogos não é empilhar nove jogos. O que amarra tudo — e é **nosso** —
-é um fio condutor único:
+são dois fios:
 
-> **A sucata é o recurso central e o coração moral.** Você constrói **certo**,
-> fechando o ciclo, para a segunda chance não afundar no lixo como a Terra.
+> **1. A sucata é o recurso central.** Tudo passa pelo lixo que a humanidade
+> deixou e pelo que você reaproveita.
+>
+> **2. Cada escolha pesa no futuro da espécie.** Um **Índice da Segunda Chance**
+> reage a tudo, com **consequência tardia** — o mundo lembra.
 
-## O fio condutor por camada
-- **Sobreviver**: o lixo vira suas primeiras ferramentas (Era 1).
-- **Automatizar**: cadeias transformam lixo em recurso (Era 2).
-- **Urbanizar**: a cidade tem meta de lixo zero (Era 3).
-- **Defender**: proteger o que se construiu limpo (Era 4).
-- **Decidir**: que civilização deixar de legado (Era 5).
+## O fio por camada
+- **Sobreviver**: a sucata vira suas primeiras ferramentas (Era 1).
+- **Automatizar**: cadeias transformam sucata em recurso (Era 2).
+- **Urbanizar**: a colônia vira cidade viável (Era 3).
+- **Defender**: proteger 16 vidas e o que se construiu (Era 4).
+- **Decidir**: que recomeço você deixa de legado (Era 5).
 
 ## Por que é novo
-Survival, automação e citybuilder existem. **Fazer da economia circular o eixo
-de progressão** — onde queimar/aterrar é literalmente pior no balanço — não é o
-foco de nenhum dos nove. É a nossa marca.
+Survival, automação e citybuilder existem. **Fazer da consequência ambiental e
+humana o eixo de progressão** — com 16 colonos comandáveis e um índice que cobra
+seus atalhos — não é o foco de nenhum dos nove. É a nossa marca.

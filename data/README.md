@@ -66,7 +66,7 @@ mas pode virar objeto também).
 Estas regras são **garantidas** no protótipo e devem se manter no port:
 
 1. **Hierarquia monotônica**: `reutilizar.credits >= reciclar.credits >= incinerar.credits >= aterro.credits`.
-2. **Incinerar e aterro têm `eco = 0`**: a pedagogia D-04 depende disso.
+2. **Incinerar e aterro têm `eco = 0`**: a regra de consequência D-04 depende disso.
 3. **Destino ideal é a opção de maior rendimento**: para todo item, o
    `destino` (ideal) é o `option` com mais créditos E mais eco. Se você
    adicionar/editar itens, mantenha essa regra.

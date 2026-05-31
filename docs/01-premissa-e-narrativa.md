@@ -1,23 +1,24 @@
 # 01 — Premissa e narrativa
 
 ## O gancho
-A Terra virou um aterro global. Ar irrespirável, oceanos de plástico, solo
-contaminado. Não dá mais para limpar a tempo — mas dá para **não recomeçar
-errado**. A humanidade lança arcas a sistemas distantes. Você comanda uma.
+A Terra virou um aterro global — ar irrespirável, oceanos de plástico, solo
+morto. Não dá para limpar a tempo. Como último lance, a humanidade lança
+expedições a outras galáxias.
+
+## A expedição
+Vocês são **até 16 especialistas** do **Baluarte**, enviados a um sistema em
+**outra galáxia** com uma ordem: **preparar o local para a humanidade
+recomeçar**. Chegam com pouco — e com a sucata da própria nave.
 
 ## Seu papel
-Operador de uma arca de recolonização do **Baluarte**. Chega com pouco: um
-módulo de pouso, ferramentas básicas e a doutrina do ciclo fechado. O planeta
-de destino é selvagem e indiferente. Tudo que você tem de início é... sucata.
+Comandar a colônia. No solo, você lidera os 16 (jogando um, comandando os outros
+como NPCs); no co-op, cada jogador assume funções. Ver [61](61-cooperativo-e-comando-de-npcs.md).
 
-## A promessa
-Transformar sucata em sobrevivência, sobrevivência em indústria, indústria em
-cidade, cidade em civilização — e provar que dá para crescer **sem lixo**.
+## A promessa (e o peso)
+Transformar sucata em sobrevivência, sobrevivência em colônia, colônia em
+recomeço viável. Mas **cada escolha pesa**: fazer certo aproxima a segunda
+chance; o atalho sujo a afasta — e cobra depois. Ver [60](60-consequencia-e-segunda-chance.md).
 
 ## Tom
-Esperança trabalhada, não ingênua. Começa apertado e sujo; termina amplo e
-limpo. Ver [02 — Fantasia e tom](02-fantasia-central-e-tom.md).
-
-## Arcos
-A narrativa segue as Eras (ver [53 — Linha do tempo](53-linha-do-tempo-e-arcos.md))
-e cruza com a lore das Crônicas da Baluarte (ver [07](07-conexao-com-projeto-baluarte.md)).
+Esperança trabalhada, não ingênua; tensão de quem carrega o futuro da espécie.
+Ver [02](02-fantasia-central-e-tom.md). Arcos seguem as Eras (ver [53](53-linha-do-tempo-e-arcos.md)).

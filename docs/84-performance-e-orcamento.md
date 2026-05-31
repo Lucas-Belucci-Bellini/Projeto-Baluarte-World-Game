@@ -1,7 +1,7 @@
 # 84 — Performance e orçamento
 
 ## Web
-- Alvo: rodar liso em **hardware modesto** (PC de escola, celular).
+- Alvo: rodar liso em **hardware modesto** (PC modesto, celular).
 - Simulação por tique de passo fixo; evitar trabalho por frame desnecessário.
 - Limitar entidades ativas; usar grades/índices espaciais quando crescer.
 
@@ -14,5 +14,5 @@ Uso **moderado** de recursos pesados (sem Nanite/Lumen full obrigatório). Testa
 cedo em máquina fraca.
 
 ## Métrica
-FPS estável > beleza. Um protótipo que roda e ensina vale mais que um lindo que
+FPS estável > beleza. Um protótipo que roda vale mais que um lindo que
 trava.

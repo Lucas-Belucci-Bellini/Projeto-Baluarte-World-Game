@@ -16,6 +16,6 @@ Tudo se faz de **sucata processada**. Receita = entradas → saída + tempo.
 Receitas em JSON (`data/recipes.json`, futuro): `{ id, inputs[], output, tempo,
 maquina }`. Mantém o jogo dirigido por dados.
 
-## Regra educativa
+## Regra de consequência
 Receitas que usam material **reciclado** custam menos que "fabricar do zero",
 reforçando o ciclo. Ver [31](31-economia-circular-e-recursos.md).

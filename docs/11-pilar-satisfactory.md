@@ -10,7 +10,7 @@ balanceamento próprios.
 
 ## Como vira nosso
 A cadeia processa **lixo**: Sucata → Triagem → Matéria-prima → Componente →
-Estrutura. A pegada educativa entra no balanço (reciclar rende; incinerar não).
+Estrutura. A consequência entra no balanço (reciclar rende; incinerar não).
 
 ## Mecânicas concretas (web-first)
 - Esteira simples (1 origem → 1 estação) em grade 2D.

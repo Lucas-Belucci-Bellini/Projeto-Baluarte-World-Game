@@ -8,7 +8,7 @@ Mil-sim **mais acessível** e a força de um **editor de cenários** + comunidad
 Sem engine, assets ou conteúdo do jogo. Nosso editor, nosso formato.
 
 ## Como vira nosso
-Uma camada tática que **qualquer aluno pega rápido**, e um **editor de cenários**
+Uma camada tática que **qualquer jogador pega rápido**, e um **editor de cenários**
 simples: posicionar inimigos/objetivos numa fatia e compartilhar (JSON).
 
 ## Mecânicas concretas (web-first)

@@ -33,7 +33,7 @@ em qualquer navegador.
 
 ## Por que o protótipo continua relevante
 
-- **Aula de reciclagem na escola**: roda no navegador, sem instalar nada.
+- **Protótipo no navegador**: roda sem instalar nada.
   Vai continuar sendo o canal "abre rápido em sala" mesmo depois que o jogo
   Unreal estiver pronto. O Unreal precisa ser instalado; o protótipo, não.
 - **Sandbox de regras**: ajustar números/itens aqui é instantâneo. Quando
