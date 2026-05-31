@@ -1,0 +1,145 @@
+/* ============================================================
+   world.css — Cenas (menu + Era 1). A Era 0 mantém game.css.
+   ============================================================ */
+
+.scene { position: absolute; inset: 0; }
+.hidden { display: none !important; }
+
+.scene-back {
+  position: absolute; top: 10px; left: 10px; z-index: 60;
+  background: rgba(8, 14, 24, 0.8); color: #eaf2f8; border: 1px solid #2c4258;
+  border-radius: 10px; padding: 8px 12px; font-family: 'Fredoka', sans-serif;
+  font-weight: 600; cursor: pointer;
+}
+
+/* ===== Menu ===== */
+.menu-scene {
+  display: flex; align-items: center; justify-content: center; padding: 20px;
+  font-family: 'Fredoka', system-ui, sans-serif; color: #e8f0f5;
+  background:
+    radial-gradient(1200px 600px at 70% -10%, #16324a 0%, transparent 60%),
+    radial-gradient(900px 500px at 10% 110%, #2a1840 0%, transparent 55%),
+    linear-gradient(180deg, #070b14 0%, #0a0f1c 100%);
+  overflow: auto;
+}
+.menu-card {
+  max-width: 580px; width: 100%;
+  background: rgba(10, 16, 28, 0.72); border: 1px solid #1d2b3a;
+  border-radius: 20px; padding: 30px; backdrop-filter: blur(6px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.menu-kicker { letter-spacing: 2px; font-size: 12px; color: #5fb0d8; font-weight: 700; }
+.menu-card h1 { font-size: clamp(34px, 7vw, 48px); margin: 6px 0 10px; line-height: 1; }
+.menu-pitch { color: #aebfce; line-height: 1.55; margin: 0 0 6px; font-size: 15px; }
+.menu-eras { display: grid; gap: 12px; margin-top: 20px; }
+.menu-era {
+  display: grid; grid-template-columns: auto 1fr; gap: 2px 14px;
+  text-align: left; padding: 14px 16px; border-radius: 14px;
+  background: #101a2a; border: 1px solid #24364a; color: #e8f0f5;
+  cursor: pointer; transition: transform 0.12s, border-color 0.12s;
+}
+.menu-era:hover { border-color: #46c7e8; transform: translateY(-2px); }
+.menu-era .me-ic { grid-row: 1 / 3; align-self: center; font-size: 30px; }
+.menu-era b { font-size: 16px; }
+.menu-era small { color: #9fb2c4; font-size: 13px; }
+.menu-foot { margin-top: 18px; font-size: 12px; color: #7f93a6; }
+.menu-foot a { color: #5fb0d8; }
+
+/* ===== Era 1 ===== */
+#era1 { background: #070a10; }
+.e1-canvas { display: block; width: 100%; height: 100%; touch-action: none; background: #070a10; }
+
+.e1-hud {
+  position: absolute; inset: 0; pointer-events: none;
+  font-family: 'Fredoka', system-ui, sans-serif; color: #eaf2f8;
+}
+.e1-hud > * { pointer-events: none; }
+
+.e1-top {
+  position: absolute; top: 8px; left: 8px; right: 8px;
+  display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap;
+}
+.e1-clock, .e1-indice {
+  background: rgba(8, 14, 24, 0.72); padding: 6px 12px; border-radius: 10px; font-weight: 600; font-size: 14px;
+}
+.e1-btn {
+  pointer-events: auto; background: #1f9d8f; color: #04231f; border: none;
+  border-radius: 10px; padding: 10px 14px; font-weight: 700;
+  font-family: 'Fredoka', sans-serif; cursor: pointer; font-size: 14px;
+}
+.e1-btn:hover { filter: brightness(1.08); }
+.e1-btn.ghost { background: transparent; border: 1px solid #2c4258; color: #aebfce; }
+
+.e1-meters { position: absolute; top: 48px; left: 8px; display: grid; gap: 6px; width: min(260px, 56%); }
+.e1-meter {
+  display: grid; grid-template-columns: auto 1fr; gap: 8px; align-items: center;
+  font-size: 12px; background: rgba(8, 14, 24, 0.62); padding: 4px 8px; border-radius: 8px;
+}
+.e1-meter .bar { height: 10px; background: #0c1622; border-radius: 6px; overflow: hidden; }
+.e1-meter .bar i { display: block; height: 100%; width: 50%; transition: width 0.2s, background 0.2s; }
+
+.e1-objective {
+  position: absolute; top: 104px; left: 8px; max-width: min(360px, 70%);
+  background: rgba(8, 14, 24, 0.62); padding: 6px 10px; border-radius: 8px; font-size: 13px;
+}
+.e1-inv {
+  position: absolute; top: 150px; left: 8px; right: 8px;
+  display: flex; flex-wrap: wrap; gap: 6px; max-width: 70%;
+}
+.e1-inv .chip {
+  background: rgba(8, 14, 24, 0.72); border-left: 3px solid var(--c, #888);
+  padding: 3px 8px; border-radius: 6px; font-size: 12px;
+}
+.e1-inv .chip.vazio { color: #8aa; border-left-color: #445; }
+.e1-inv .chip.tool { border-left-color: #f0b315; }
+
+.e1-dpad { position: absolute; left: 14px; bottom: 14px; display: grid; justify-items: center; gap: 6px; pointer-events: auto; }
+.e1-dpad .row { display: flex; gap: 6px; }
+.e1-dpad button {
+  width: 50px; height: 50px; border-radius: 12px; font-size: 18px; cursor: pointer;
+  background: rgba(20, 32, 48, 0.85); color: #eaf2f8; border: 1px solid #2c4258;
+}
+.e1-dpad button:active { background: #46c7e8; color: #04231f; }
+
+.e1-actions { position: absolute; right: 14px; bottom: 14px; display: flex; flex-direction: column; gap: 8px; align-items: flex-end; }
+
+.e1-panel {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  width: min(460px, 92%); max-height: 82%; overflow: auto;
+  background: rgba(10, 16, 28, 0.97); border: 1px solid #24364a; border-radius: 16px;
+  padding: 16px; pointer-events: auto; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+}
+.e1-panel-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 18px; }
+.e1-panel-head button { background: none; border: none; color: #aebfce; font-size: 20px; cursor: pointer; }
+.e1-hint { color: #9fb2c4; font-size: 13px; margin: 0 0 10px; }
+
+.e1-recipes, .e1-orders { display: grid; gap: 8px; }
+.e1-recipe {
+  display: flex; gap: 12px; align-items: center; text-align: left; cursor: pointer; color: #eaf2f8;
+  background: #101a2a; border: 1px solid #24364a; border-radius: 12px; padding: 10px 12px;
+}
+.e1-recipe:hover:not(.no) { border-color: #46c7e8; }
+.e1-recipe.no { opacity: 0.5; cursor: not-allowed; }
+.e1-recipe .ic { font-size: 26px; }
+.e1-recipe .info { display: grid; }
+.e1-recipe .info small { color: #9fb2c4; font-size: 12px; }
+.e1-recipe .info em { color: #7fd0a0; font-style: normal; font-size: 12px; margin-top: 2px; }
+.e1-order {
+  background: #101a2a; border: 1px solid #24364a; border-radius: 12px; padding: 12px 14px;
+  color: #eaf2f8; cursor: pointer; text-align: left; font-family: 'Fredoka', sans-serif; font-size: 15px;
+}
+.e1-order:hover { border-color: #46c7e8; }
+
+.e1-toast {
+  position: absolute; bottom: 84px; left: 50%; transform: translateX(-50%);
+  background: rgba(8, 14, 24, 0.92); padding: 8px 16px; border-radius: 20px; font-size: 14px;
+  border: 1px solid #24364a;
+}
+
+.e1-end { text-align: center; }
+.e1-end h2 { margin: 4px 0 10px; }
+.e1-end.win h2 { color: #7fd0a0; }
+.e1-end.lose h2 { color: #e08a8a; }
+.e1-end p { color: #c4d2de; line-height: 1.5; }
+.e1-end-stats { color: #9fb2c4; }
+.e1-end-actions { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }

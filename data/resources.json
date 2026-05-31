@@ -1,0 +1,6 @@
+[
+  { "id": "sucata",   "nome": "Sucata",   "cor": "#9aa3ad", "tipo": "material",     "biomas": ["destrocos", "floresta", "costa"], "raridade": 1 },
+  { "id": "organico", "nome": "Orgânico", "cor": "#6fae3a", "tipo": "comida_bruta", "biomas": ["floresta", "costa"],              "raridade": 1 },
+  { "id": "fibra",    "nome": "Fibra",    "cor": "#b8893f", "tipo": "material",     "biomas": ["floresta"],                       "raridade": 2 },
+  { "id": "cristal",  "nome": "Cristal",  "cor": "#46c7e8", "tipo": "material",     "biomas": ["destrocos", "costa"],             "raridade": 3 }
+]

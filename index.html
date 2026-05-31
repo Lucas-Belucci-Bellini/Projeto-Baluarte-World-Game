@@ -3,62 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="description" content="Jogo educacional de reciclagem do universo Baluarte — separe pelas 7 cores CONAMA e dê o destino certo." />
-  <title>Baluarte World Game — Joga no Lugar Certo!</title>
+  <meta name="description" content="Segunda Chance — jogo de sobrevivência e consequência do universo Baluarte." />
+  <title>Baluarte World Game — Segunda Chance</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Nunito:wght@600;700;800;900&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-<div class="stage" id="stage">
-  <!-- Céu decorativo -->
-  <div class="sun"></div>
-  <div class="clouds">
-    <div class="cloud c1"></div>
-    <div class="cloud c2"></div>
-    <div class="cloud c3"></div>
+<!-- ===== MENU ===== -->
+<div id="menu" class="scene menu-scene">
+  <div class="menu-card">
+    <span class="menu-kicker">PROJETO-BALUARTE · WORLD GAME</span>
+    <h1>Segunda Chance</h1>
+    <p class="menu-pitch">A Terra ruiu sob a poluição e o lixo. Até <b>16 pessoas</b> foram enviadas a
+      <b>outra galáxia</b> para preparar o recomeço da humanidade. <b>Cada ação sua decide se a
+      humanidade terá — ou não — uma segunda chance.</b></p>
+    <div class="menu-eras">
+      <button class="menu-era" data-era="1">
+        <span class="me-ic">🪐</span>
+        <b>Era 1 — Pouso e Sobrevivência</b>
+        <small>Pouse, explore, cate sucata, erga um abrigo e sobreviva à primeira noite. Comande seus colonos.</small>
+      </button>
+      <button class="menu-era" data-era="0">
+        <span class="me-ic">♻️</span>
+        <b>Era 0 — Triagem</b>
+        <small>A semente: separe e processe a sucata pela hierarquia certa.</small>
+      </button>
+    </div>
+    <div class="menu-foot">protótipo · alvo AAA · <a href="docs/README.md">plano completo (GDD)</a></div>
   </div>
+</div>
 
-  <!-- HUD -->
-  <div class="title-card">
-    <span class="kicker">BASQUETE DA RECICLAGEM 🏀</span>
-    <h1>Joga no Lugar Certo!</h1>
-    <div class="sub">Separe na cor certa e dê o destino certo ♻️</div>
-  </div>
+<!-- ===== ERA 1 (canvas) ===== -->
+<div id="era1" class="scene hidden"></div>
 
-  <div class="hud">
-    <div class="chip score"><span class="icon">🏀</span><span>Pontos: <b id="score">0</b></span></div>
-    <div class="chip credits"><span class="icon">♻️</span><span>Créditos: <b id="credits">0</b></span></div>
-    <div class="chip eco"><span class="icon">🌱</span><span>EcoPontos: <b id="eco">0</b></span></div>
-    <div class="chip streak"><span class="icon">🔥</span><span>Sequência: <b id="streak">0</b></span></div>
-    <div class="chip lives"><span class="icon">❤️</span><span class="hearts" id="hearts">❤️❤️❤️</span></div>
-  </div>
-
-  <div class="setor" id="setor">
-    <div class="setor-head"><span class="nm" id="setorName">Setor 1</span><span class="ct" id="setorCount">0/6</span></div>
-    <div class="setor-track"><div class="setor-fill" id="setorFill"></div></div>
-  </div>
-
-  <button class="restart" id="restart">↻ Reiniciar</button>
-  <button class="shopbtn" id="shopBtn">🛒 Loja</button>
-
-  <div class="ground"></div>
-
-  <!-- Lixeiras -->
-  <div class="bins" id="bins"></div>
-
-  <!-- Item -->
-  <div class="hint" id="hint">Arraste para a lixeira certa!<span class="arrow"></span></div>
-  <div class="item-wrap" id="itemWrap">
-    <div class="item" id="item"></div>
-  </div>
-
-  <!-- Roteamento de destino (etapa após separar) -->
-  <div class="dest-panel" id="destPanel" aria-hidden="true">
-    <div class="dest-title" id="destTitle">Pra onde vai?</div>
-    <div class="dest-options" id="destOptions"></div>
-    <div class="dest-legend">Melhor → pior: 🔄 Reutilizar › ♻️ Reciclar / 🌱 Compostar › 🔥 Incinerar › ⛰️ Aterro · ↩️ Devolver = perigosos</div>
+<!-- ===== ERA 0 (triagem) ===== -->
+<div id="era0" class="scene hidden">
+  <button id="era0-menu" class="scene-back">↩ Menu</button>
+  <div class="stage" id="stage">
+    <div class="sun"></div>
+    <div class="clouds">
+      <div class="cloud c1"></div>
+      <div class="cloud c2"></div>
+      <div class="cloud c3"></div>
+    </div>
+    <div class="title-card">
+      <span class="kicker">BASQUETE DA RECICLAGEM 🏀</span>
+      <h1>Joga no Lugar Certo!</h1>
+      <div class="sub">Separe na cor certa e dê o destino certo ♻️</div>
+    </div>
+    <div class="hud">
+      <div class="chip score"><span class="icon">🏀</span><span>Pontos: <b id="score">0</b></span></div>
+      <div class="chip credits"><span class="icon">♻️</span><span>Créditos: <b id="credits">0</b></span></div>
+      <div class="chip eco"><span class="icon">🌱</span><span>EcoPontos: <b id="eco">0</b></span></div>
+      <div class="chip streak"><span class="icon">🔥</span><span>Sequência: <b id="streak">0</b></span></div>
+      <div class="chip lives"><span class="icon">❤️</span><span class="hearts" id="hearts">❤️❤️❤️</span></div>
+    </div>
+    <div class="setor" id="setor">
+      <div class="setor-head"><span class="nm" id="setorName">Setor 1</span><span class="ct" id="setorCount">0/6</span></div>
+      <div class="setor-track"><div class="setor-fill" id="setorFill"></div></div>
+    </div>
+    <button class="restart" id="restart">↻ Reiniciar</button>
+    <button class="shopbtn" id="shopBtn">🛒 Loja</button>
+    <div class="ground"></div>
+    <div class="bins" id="bins"></div>
+    <div class="hint" id="hint">Arraste para a lixeira certa!<span class="arrow"></span></div>
+    <div class="item-wrap" id="itemWrap">
+      <div class="item" id="item"></div>
+    </div>
+    <div class="dest-panel" id="destPanel" aria-hidden="true">
+      <div class="dest-title" id="destTitle">Pra onde vai?</div>
+      <div class="dest-options" id="destOptions"></div>
+      <div class="dest-legend">Melhor → pior: 🔄 Reutilizar › ♻️ Reciclar / 🌱 Compostar › 🔥 Incinerar › ⛰️ Aterro · ↩️ Devolver = perigosos</div>
+    </div>
   </div>
 </div>
 

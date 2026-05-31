@@ -6,7 +6,7 @@ norte AAA, sem depender de "ter tudo pronto".
 | Era | Nome | Pilares | Estado |
 |-----|------|---------|--------|
 | 0 | Triagem (semente: processar sucata) | (núcleo) | ✅ jogável (web) |
-| 1 | Pouso e sobrevivência | Subnautica, Ark, Fallout | ⏳ próxima |
+| 1 | Pouso e sobrevivência | Subnautica, Ark, Fallout | 🛠️ protótipo jogável |
 | 2 | Automação | Satisfactory | 🔭 |
 | 3 | Engenharia e cidade | Space Engineers, Cities Skylines | 🔭 |
 | 4 | Defesa e táticas | CoD, Arma 3/Reforger, Ark | 🔭 |

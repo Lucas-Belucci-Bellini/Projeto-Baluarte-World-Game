@@ -8,14 +8,17 @@ Marcos do **Projeto-Baluarte-World-Game** (*Segunda Chance*). Cada marco é uma
 - **M0** — Protótipo original de triagem (referência). ✅
 - **M0.5** — Era 0 web modular (JS+Vite, dados em JSON, testes). ✅
 - **Plano-mestre** — GDD completo (60+ docs) + visão AAA *Segunda Chance*. ✅
+- **M1 (protótipo) — Era 1: Pouso e Sobrevivência.** 🛠️ Jogável: mundo top-down,
+  biomas + névoa de guerra, coleta de sucata, sobrevivência (fome/energia +
+  ciclo dia-noite), crafting/estruturas, abrigo, vitória "sobreviver à 1ª noite",
+  Índice da Segunda Chance e **colonos NPC comandáveis** (semente dos 16).
 
 ## Próximo
-- **M1 — Era 1: Pouso e sobrevivência.** Pousar, explorar biomas, catar sucata,
-  craftar abrigo, sobreviver à 1ª noite — com 1–3 colonos NPC comandáveis (semente
-  do sistema de 16). Backlog em [`docs/92`](docs/92-backlog-inicial.md).
+- **Polir a Era 1**: balanceamento, mais receitas/criaturas, áudio, mira/colisão
+  refinada, e expandir o comando para os 16 (co-op vem depois).
+- **M2 — Era 2: Automação** (esteiras/fábricas processam a sucata).
 
 ## Norte (Eras seguintes)
-- **M2 — Era 2: Automação** (esteiras/fábricas processam sucata).
 - **M3 — Era 3: Engenharia e cidade** (construção modular + simulação urbana).
 - **M4 — Era 4: Defesa e táticas** (combate + comando dos 16 / esquadrões Baluarte).
 - **M5 — Era 5: Civilização e órbita** (assentamentos, escolhas, finais).

@@ -1,0 +1,6 @@
+[
+  { "id": "coletor",  "nome": "Coletor",  "icon": "🛠️", "tipo": "ferramenta", "entradas": { "sucata": 3 },             "tempo": 2, "efeito": { "coleta": 1 }, "desc": "Coleta +1 por vez (ferramenta permanente)." },
+  { "id": "refeicao", "nome": "Refeição", "icon": "🍲", "tipo": "consumivel", "entradas": { "organico": 2 },           "tempo": 1, "efeito": { "fome": -45 }, "desc": "Cozinha orgânico e mata a fome." },
+  { "id": "fogueira", "nome": "Fogueira", "icon": "🔥", "tipo": "estrutura",  "entradas": { "sucata": 2, "fibra": 2 }, "tempo": 2, "efeito": { "calor": 1 }, "desc": "Aquece à noite (raio de calor)." },
+  { "id": "abrigo",   "nome": "Abrigo",   "icon": "⛺", "tipo": "estrutura",  "entradas": { "sucata": 6, "fibra": 4 }, "tempo": 3, "efeito": { "abrigo": 1 }, "desc": "Protege do frio da noite — a chave para sobreviver." }
+]

@@ -1,0 +1,6 @@
+[
+  { "id": "destrocos", "nome": "Planície de Destroços",     "cor": "#c7a86a", "perigo": 1, "recursos": ["sucata", "cristal"] },
+  { "id": "floresta",  "nome": "Floresta Bioluminescente",  "cor": "#3f6b4a", "perigo": 1, "recursos": ["organico", "fibra", "sucata"] },
+  { "id": "costa",     "nome": "Costa",                     "cor": "#6a8f74", "perigo": 1, "recursos": ["sucata", "cristal", "organico"] },
+  { "id": "agua",      "nome": "Mar Raso",                  "cor": "#2f6f9f", "perigo": 2, "recursos": [], "intransponivel": true }
+]
