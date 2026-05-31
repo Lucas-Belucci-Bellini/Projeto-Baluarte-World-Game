@@ -7,6 +7,17 @@
 
 [pb]: https://github.com/Lucas-Belucci-Bellini/Projeto-Baluarte
 
+## 🌌 A visão grande (plano-mestre)
+
+A versão web hoje é a **Era 0** (triagem) de uma visão muito maior: *Segunda
+Chance* — a Terra se afogou em lixo e você reconstrói a humanidade num sistema
+distante, juntando **as ideias** (nunca os arquivos) de Satisfactory, Space
+Engineers, Cities Skylines, Subnautica, Call of Duty, Arma 3/Reforger, Ark e
+Fallout 4. O eixo de tudo é a **economia circular**.
+
+- **Resumo de 1 página**: [`BLUEPRINT.md`](BLUEPRINT.md)
+- **Plano completo (GDD, 60+ documentos)**: [`docs/`](docs/README.md)
+
 ## Rodar a versão web (jogável agora)
 
 Stack idêntica à do Projeto-Baluarte — **JS puro (ES2022) + Vite**, sem
