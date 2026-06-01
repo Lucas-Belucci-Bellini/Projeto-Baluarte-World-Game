@@ -16,6 +16,7 @@ export function createHUD(container, handlers) {
     <div class="e1-top">
       <div class="e1-clock" id="e1-clock">☀️ Dia 1 · dia</div>
       <div class="e1-indice" id="e1-indice"><span id="e1-indice-val">Índice da Segunda Chance: 50</span></div>
+      <button class="e1-btn ghost" id="e1-diario">📜 Diário</button>
       <button class="e1-btn ghost" id="e1-menu">↩ Menu</button>
     </div>
     <canvas class="e1-minimap" id="e1-minimap" width="120" height="120"></canvas>
@@ -58,6 +59,7 @@ export function createHUD(container, handlers) {
   const miniCtx = mini.getContext('2d');
 
   $('#e1-menu').onclick = () => handlers.menu();
+  $('#e1-diario').onclick = () => openDiario();
   container.querySelectorAll('.e1-actions [data-act]').forEach((b) => {
     b.onclick = () => {
       const a = b.dataset.act;
@@ -122,6 +124,18 @@ export function createHUD(container, handlers) {
     });
   }
 
+  function openDiario() {
+    if (!lastState) return;
+    const frags = lastState.lore || [];
+    panel.classList.remove('hidden');
+    panel.innerHTML = `<div class="e1-panel-head"><b>📜 Diário de bordo</b><button id="e1-close">✕</button></div>
+      ${frags.length === 0
+        ? '<p class="e1-hint">Nenhum fragmento ainda. Explore os destroços (marcados com "?") para descobrir o que houve com quem veio antes.</p>'
+        : `<div class="e1-lore">${frags.map((f) => `<div class="e1-frag"><b>${f.titulo}</b><p>${f.texto}</p></div>`).join('')}</div>
+           <p class="e1-hint">${frags.length}/6 fragmentos recuperados.</p>`}`;
+    panel.querySelector('#e1-close').onclick = fecharPainel;
+  }
+
   function showIntro(onStart) {
     const intro = $('#e1-intro');
     intro.classList.remove('hidden');
@@ -175,7 +189,13 @@ export function createHUD(container, handlers) {
     panel.innerHTML = `<div class="e1-end ${win ? 'win' : 'lose'}">
       <h2>${titulo}</h2>
       <p>${texto}</p>
-      <p class="e1-end-stats">Índice da Segunda Chance: <b>${Math.round(state.indice)}</b> · Dia ${state.dia}</p>
+      <div class="e1-report">
+        <div class="row"><span>Dias sobrevividos</span><b>${state.dia}</b></div>
+        <div class="row"><span>Colonos vivos</span><b>${vivos}/${state.npcs.length}</b></div>
+        <div class="row"><span>Recursos catados</span><b>${state.coletado}</b></div>
+        <div class="row"><span>Fragmentos de lore</span><b>${state.lore.length}/6</b></div>
+        <div class="row"><span>Índice da Segunda Chance</span><b>${Math.round(state.indice)}</b></div>
+      </div>
       <div class="e1-end-actions">
         <button class="e1-btn" id="e1-retry">↻ Tentar de novo</button>
         <button class="e1-btn ghost" id="e1-tomenu">↩ Menu</button>

@@ -8,7 +8,7 @@
  * `startEra1(root)` monta tudo dentro de `root` e devolve um teardown().
  */
 
-import { RECIPE, RESOURCE, CREATURE, CREATURES } from '../engine/data1.js';
+import { RECIPE, RESOURCE, CREATURE, CREATURES, LORE } from '../engine/data1.js';
 import {
   DIA_SEGUNDOS, faseDoDia, ehNoite, fomeApos, energiaApos, estaFaminto,
   vidaApos, podeRegenerar, podeCraftar, craftar, aplicarConsequencia, INDICE_INICIAL,
@@ -16,6 +16,7 @@ import {
 import { gerarMundo } from './world.js';
 import { render } from './render.js';
 import { createHUD } from './hud.js';
+import { initAudio, sfx } from './audio.js';
 
 const VEL_JOGADOR = 96;   // px/s
 const VEL_NPC = 82;
@@ -57,6 +58,8 @@ export function startEra1(root) {
     frio: false,
     noiteAtiva: false,
     sobreviveuNoite: false,
+    lore: [],      // fragmentos de lore coletados
+    coletado: 0,   // total de recursos catados (relatório)
     placing: null, // receita de estrutura aguardando posicionamento
     ghost: null,   // { x, y, valido } prévia da construção
     pausado: true, // espera o tutorial inicial
@@ -126,7 +129,8 @@ export function startEra1(root) {
   }
 
   // Tutorial inicial: o mundo renderiza ao fundo, mas o tempo só corre ao "Pousar".
-  hud.showIntro(() => { state.pausado = false; });
+  // O clique também inicia o áudio (gesto do usuário exigido pelo navegador).
+  hud.showIntro(() => { state.pausado = false; initAudio(); });
 
   /* ===== Ações ===== */
   function nodeMaisProximo(x, y, raio, res = null) {
@@ -142,13 +146,35 @@ export function startEra1(root) {
   function interagir() {
     if (state.acabou || state.pausado) return;
     if (state.placing) { confirmarConstrucao(); return; }
+    if (abrirDestroco()) return;
     const n = nodeMaisProximo(state.player.x, state.player.y, RAIO_COLETA);
     if (!n) { hud.toast('Nada para coletar por perto.'); return; }
     const qtd = Math.min(n.qtd, 1 + state.tools.coletor);
     state.inventory[n.res] = (state.inventory[n.res] || 0) + qtd;
+    state.coletado += qtd;
     n.qtd -= qtd;
     if (n.qtd <= 0) world.removerNode(n);
+    sfx.coleta();
     hud.toast(`+${qtd} ${RESOURCE[n.res].nome}`);
+  }
+
+  function abrirDestroco() {
+    const r2 = RAIO_COLETA * RAIO_COLETA;
+    for (const w of world.wrecks) {
+      if (w.aberto) continue;
+      const cx = w.x * T + T / 2, cy = w.y * T + T / 2;
+      if ((cx - state.player.x) ** 2 + (cy - state.player.y) ** 2 > r2) continue;
+      w.aberto = true;
+      state.inventory.cristal = (state.inventory.cristal || 0) + 3;
+      state.coletado += 3;
+      sfx.loot();
+      const frag = LORE.find((f) => !state.lore.some((x) => x.id === f.id));
+      if (frag) { state.lore.push(frag); hud.toast(`📜 ${frag.titulo} (+3 Cristal) — veja o Diário.`); }
+      else hud.toast('Destroço vasculhado: +3 Cristal.');
+      consequencia('reaproveitou');
+      return true;
+    }
+    return false;
   }
 
   function craftar_(id) {
@@ -162,6 +188,7 @@ export function startEra1(root) {
       return;
     }
     state.inventory = craftar(r, state.inventory);
+    sfx.craft();
     if (r.tipo === 'ferramenta') {
       if (r.efeito.luz) { state.tools.tocha = 1; hud.toast(`${r.nome} pronta! Mais luz à noite.`); }
       else { state.tools.coletor += r.efeito.coleta || 1; hud.toast(`${r.nome} pronto! Coleta melhorada.`); }
@@ -189,6 +216,7 @@ export function startEra1(root) {
     state.inventory = craftar(r, state.inventory);
     state.structures.push({ tipo: r.id, x: g.x, y: g.y });
     state.placing = null; state.ghost = null;
+    sfx.build();
     if (r.efeito.baliza) { consequencia('recomeco_preparado'); vencer('baliza'); return; }
     consequencia('reaproveitou');
     hud.toast(`${r.nome} erguido.`);
@@ -216,6 +244,7 @@ export function startEra1(root) {
     alvo.tame = (alvo.tame || 0) + 1;
     if (alvo.tame >= 3) {
       alvo.comp = 'aliado'; alvo.hp = 45; alvo.golpe = 0;
+      sfx.aliado();
       hud.toast(`${CREATURE[alvo.tipo].nome} virou seu aliado! 🤝 Vai lutar com você.`);
     } else {
       hud.toast(`Alimentou (${alvo.tame}/3) — continue para aliar.`);
@@ -244,6 +273,7 @@ export function startEra1(root) {
     }
     if (!alvo) return;
     alvo.hp -= arma.dano;
+    sfx.hit();
     if (alvo.hp <= 0) {
       state.creatures.splice(state.creatures.indexOf(alvo), 1);
       hud.toast(`${CREATURE[alvo.tipo].nome} abatido.`);
@@ -260,6 +290,7 @@ export function startEra1(root) {
   function aplicarDano(alvo, dano) {
     if (alvo.tipo === 'player') {
       state.vida = Math.max(0, state.vida - dano);
+      sfx.hurt();
     } else if (alvo.tipo === 'npc') {
       alvo.ref.vida -= dano;
       if (alvo.ref.vida <= 0) {
@@ -288,6 +319,7 @@ export function startEra1(root) {
       if (!world.passavel(Math.floor(x / T), Math.floor(y / T))) continue;
       state.creatures.push({ tipo: hostil.id, x, y, vel: hostil.vel || VEL_HOSTIL_BASE, comp: 'hostil', hp: hostil.hp, dano: hostil.dano, ax: 0, ay: 0, cd: 0, golpe: 0 });
     }
+    sfx.noite();
     hud.toast('🌙 A noite caiu — espreitadores se aproximam!');
   }
 
@@ -454,12 +486,14 @@ export function startEra1(root) {
   function vencer(motivo) {
     if (state.acabou) return;
     state.acabou = true; state.venceu = true;
+    sfx.vitoria();
     hud.showEnd(true, state, motivo);
   }
   function perder(motivo) {
     if (state.acabou) return;
     state.acabou = true; state.venceu = false;
     consequencia('colapso');
+    sfx.derrota();
     hud.showEnd(false, state, motivo);
   }
 

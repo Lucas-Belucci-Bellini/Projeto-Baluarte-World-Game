@@ -153,6 +153,17 @@
 .e1-end-stats { color: #9fb2c4; }
 .e1-end-actions { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
 
+/* diário de lore */
+.e1-lore { display: grid; gap: 10px; max-height: 52vh; overflow: auto; }
+.e1-frag { background: #101a2a; border-left: 3px solid #46c7e8; border-radius: 8px; padding: 8px 12px; }
+.e1-frag b { color: #9fe8ff; }
+.e1-frag p { margin: 4px 0 0; color: #bcccdb; font-size: 13px; font-style: italic; }
+
+/* relatório de fim */
+.e1-report { display: grid; gap: 4px; margin: 12px 0; text-align: left; }
+.e1-report .row { display: flex; justify-content: space-between; background: #101a2a; border-radius: 6px; padding: 5px 10px; font-size: 13px; }
+.e1-report .row b { color: #7fd0a0; }
+
 /* minimapa */
 .e1-minimap {
   position: absolute; top: 92px; right: 8px; width: 120px; height: 120px;

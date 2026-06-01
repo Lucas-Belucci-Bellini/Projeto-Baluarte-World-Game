@@ -80,8 +80,20 @@ export function gerarMundo(W = 64, H = 64) {
     c++;
   }
 
+  // Destroços de arcas antigas: POIs de exploração (loot de cristal + fragmentos
+  // de lore). Longe do pouso, para recompensar quem explora.
+  const wrecks = [];
+  let tW = 0;
+  while (wrecks.length < 6 && tW < 800) {
+    tW++;
+    const x = 4 + rnd(W - 8), y = 4 + rnd(H - 8);
+    if (!passavel(x, y)) continue;
+    if ((x - spawn.x) ** 2 + (y - spawn.y) ** 2 < 12 * 12) continue;
+    wrecks.push({ x, y, aberto: false });
+  }
+
   return {
-    W, H, TILE, tiles, nodes, seen, spawn,
+    W, H, TILE, tiles, nodes, seen, spawn, wrecks,
     idx, dentro, biomaEm, passavel,
     /** Marca como visto tudo num raio (em tiles) ao redor de (tx,ty). */
     revelar(tx, ty, raio) {

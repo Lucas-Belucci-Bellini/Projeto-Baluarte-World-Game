@@ -9,12 +9,14 @@ import biomesJson from '../../data/biomes.json';
 import resourcesJson from '../../data/resources.json';
 import recipesJson from '../../data/recipes.json';
 import creaturesJson from '../../data/creatures.json';
+import loreJson from '../../data/lore.json';
 import { validateEra1 } from './validate1.js';
 
 export const BIOMES = biomesJson;
 export const RESOURCES = resourcesJson;
 export const RECIPES = recipesJson;
 export const CREATURES = creaturesJson;
+export const LORE = loreJson;
 
 const byId = (arr) => Object.fromEntries(arr.map((x) => [x.id, x]));
 export const BIOME = byId(BIOMES);

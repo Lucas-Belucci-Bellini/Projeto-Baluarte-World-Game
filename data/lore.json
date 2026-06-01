@@ -1,0 +1,8 @@
+[
+  { "id": "f1", "titulo": "Caixa-preta da Aurora", "texto": "\"Pousamos há 40 dias. O motor secou. Plantamos o que deu — mas queimamos o resto pra ter calor rápido. Erro.\"" },
+  { "id": "f2", "titulo": "Diário de Halden", "texto": "\"O solo não perdoa. Aterramos a sucata em vez de reaproveitar; agora não há metal pra consertar nada. A pressa custou caro.\"" },
+  { "id": "f3", "titulo": "Bilhete rasgado", "texto": "\"As criaturas não eram o problema. Nós fomos. Esgotamos a clareira inteira numa semana.\"" },
+  { "id": "f4", "titulo": "Registro de Vega (a antiga)", "texto": "\"Quem chegar depois: fechem o ciclo. Cada peça reaproveitada é um dia a mais. Não repitam a Terra.\"" },
+  { "id": "f5", "titulo": "Mapa queimado", "texto": "\"O cristal das encostas reativa a baliza. Se ainda funcionar, chamem a frota. Nós não tivemos tempo.\"" },
+  { "id": "f6", "titulo": "Última transmissão", "texto": "\"...se vocês estão ouvindo, a segunda chance é de verdade. Façam melhor que nós. Por favor.\"" }
+]

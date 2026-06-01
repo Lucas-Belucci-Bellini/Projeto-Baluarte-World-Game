@@ -65,6 +65,18 @@ export function render(ctx, world, state) {
     ctx.restore();
   }
 
+  // --- Destroços (POIs de exploração) ---
+  for (const w of world.wrecks) {
+    if (w.aberto || !world.seen[world.idx(w.x, w.y)]) continue;
+    const sx = w.x * T - camX + T / 2, sy = w.y * T - camY + T / 2;
+    ctx.fillStyle = '#6b7280'; ctx.strokeStyle = '#11161c'; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(sx - 9, sy + 5); ctx.lineTo(sx + 9, sy + 5); ctx.lineTo(sx + 5, sy - 6); ctx.lineTo(sx - 6, sy - 4);
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = '#ffd166'; ctx.font = 'bold 12px Nunito, sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText('?', sx, sy + 3);
+  }
+
   // --- Estruturas ---
   for (const s of state.structures) {
     const sx = s.x - camX, sy = s.y - camY;

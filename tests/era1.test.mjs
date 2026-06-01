@@ -21,6 +21,7 @@ const biomes = readJson('biomes.json');
 const resources = readJson('resources.json');
 const recipes = readJson('recipes.json');
 const creatures = readJson('creatures.json');
+const lore = readJson('lore.json');
 
 let pass = 0, fail = 0;
 const eq = (a, e, m) => { if (a === e) pass++; else { fail++; console.error(`✗ ${m}\n    esperado ${JSON.stringify(e)}, veio ${JSON.stringify(a)}`); } };
@@ -40,6 +41,9 @@ ok(recipes.some((r) => r.efeito && r.efeito.horta), 'existe a horta (comida reno
 ok(recipes.some((r) => r.tipo === 'arma' && r.efeito.dano > 0), 'existe arma com dano');
 ok(creatures.some((c) => c.comportamento === 'hostil'), 'existe criatura hostil');
 ok(creatures.some((c) => c.comportamento === 'neutra'), 'existe criatura neutra (aliável)');
+ok(lore.length >= 4, 'lore tem fragmentos');
+ok(new Set(lore.map((f) => f.id)).size === lore.length, 'ids de lore únicos');
+ok(lore.every((f) => f.titulo && f.texto), 'cada fragmento tem título e texto');
 
 /* ===== Ciclo dia-noite ===== */
 eq(faseDoDia(0.3), 'dia', 'meio-dia = dia');
