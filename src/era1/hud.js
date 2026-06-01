@@ -20,6 +20,7 @@ export function createHUD(container, handlers) {
     </div>
     <canvas class="e1-minimap" id="e1-minimap" width="120" height="120"></canvas>
     <div class="e1-meters">
+      <div class="e1-meter"><span>❤️ Vida</span><div class="bar"><i id="e1-vida"></i></div></div>
       <div class="e1-meter"><span>⚡ Energia</span><div class="bar"><i id="e1-energia"></i></div></div>
       <div class="e1-meter"><span>🍖 Fome</span><div class="bar"><i id="e1-fome"></i></div></div>
     </div>
@@ -33,6 +34,7 @@ export function createHUD(container, handlers) {
     </div>
     <div class="e1-actions">
       <button class="e1-btn" data-act="interact">✋ Coletar</button>
+      <button class="e1-btn danger" data-act="attack">⚔️ Atacar</button>
       <button class="e1-btn" data-act="craft">🛠️ Craftar</button>
       <button class="e1-btn" data-act="command">🫡 Comando</button>
     </div>
@@ -53,6 +55,7 @@ export function createHUD(container, handlers) {
     b.onclick = () => {
       const a = b.dataset.act;
       if (a === 'interact') handlers.interact();
+      if (a === 'attack') handlers.attack();
       if (a === 'craft') openCraft();
       if (a === 'command') openCommand();
     };
@@ -145,14 +148,21 @@ export function createHUD(container, handlers) {
     toast._t = setTimeout(() => toastEl.classList.add('hidden'), 1800);
   }
 
-  function showEnd(win, state) {
+  function showEnd(win, state, motivo) {
     panel.classList.remove('hidden');
+    const vivos = state.npcs.filter((n) => n.viva).length;
+    const titulo = win
+      ? '📡 Baliza ligada — sinal enviado!'
+      : (motivo === 'vida' ? '💀 Você caiu em combate...' : '💀 A energia se esgotou...');
+    const texto = win
+      ? `A frota recebeu o sinal. O recomeço da humanidade começou — com ${vivos} colono(s) ao seu lado.`
+      : (motivo === 'vida'
+        ? 'Os espreitadores foram demais. O recomeço terá de esperar.'
+        : 'Sem energia antes do amanhecer. O recomeço terá de esperar.');
     panel.innerHTML = `<div class="e1-end ${win ? 'win' : 'lose'}">
-      <h2>${win ? '🌅 Você sobreviveu à primeira noite!' : '💀 Você sucumbiu...'}</h2>
-      <p>${win
-        ? 'A colônia resistiu. A segunda chance ficou um pouco mais perto.'
-        : 'A energia acabou antes do amanhecer. O recomeço terá de esperar.'}</p>
-      <p class="e1-end-stats">Índice da Segunda Chance: <b>${Math.round(state.indice)}</b></p>
+      <h2>${titulo}</h2>
+      <p>${texto}</p>
+      <p class="e1-end-stats">Índice da Segunda Chance: <b>${Math.round(state.indice)}</b> · Dia ${state.dia}</p>
       <div class="e1-end-actions">
         <button class="e1-btn" id="e1-retry">↻ Tentar de novo</button>
         <button class="e1-btn ghost" id="e1-tomenu">↩ Menu</button>
@@ -164,11 +174,18 @@ export function createHUD(container, handlers) {
 
   function objetivoTexto(state) {
     const inv = state.inventory;
-    const temAbrigo = state.structures.some((s) => s.tipo === 'abrigo');
-    const s = inv.sucata || 0, f = inv.fibra || 0;
-    if (temAbrigo) return `🌙 Sobreviva à noite — fique perto do abrigo/fogueira (Dia ${state.dia}).`;
-    if (s >= 6 && f >= 4) return '✅ Recursos prontos — crafte o ABRIGO (🛠️ Craftar / C).';
-    return `🎯 Junte para o Abrigo: Sucata ${Math.min(s, 6)}/6 · Fibra ${Math.min(f, 4)}/4 (✋ Coletar / E).`;
+    const s = inv.sucata || 0, f = inv.fibra || 0, cr = inv.cristal || 0;
+    const temAbrigo = state.structures.some((x) => x.tipo === 'abrigo');
+    const temBaliza = state.structures.some((x) => x.tipo === 'baliza');
+    if (temBaliza) return '📡 Baliza ligada — sinal enviado!';
+    if (state.sobreviveuNoite) {
+      return `📡 Erga a Baliza: Sucata ${Math.min(s, 10)}/10 · Fibra ${Math.min(f, 6)}/6 · Cristal ${Math.min(cr, 4)}/4 → crafte a Baliza (C).`;
+    }
+    if (!temAbrigo) {
+      if (s >= 6 && f >= 4) return '✅ Recursos prontos — crafte o ABRIGO (🛠️ / C).';
+      return `🎯 Para o Abrigo: Sucata ${Math.min(s, 6)}/6 · Fibra ${Math.min(f, 4)}/4 (✋ Coletar / E).`;
+    }
+    return '🌙 Sobreviva à 1ª noite — fique no calor e defenda-se dos espreitadores (Espaço).';
   }
 
   function drawMinimap(state) {
@@ -200,6 +217,7 @@ export function createHUD(container, handlers) {
     const fase = faseDoDia(state.clock);
     $('#e1-clock').textContent = `${FASE_ICONE[fase]} Dia ${state.dia} · ${fase}`;
     $('#e1-indice-val').textContent = `Índice da Segunda Chance: ${Math.round(state.indice)}`;
+    setBar($('#e1-vida'), state.vida, state.vida < 30 ? '#d23636' : '#e0556a');
     setBar($('#e1-energia'), state.energia, state.energia < 25 ? '#d23636' : '#2f9d8f');
     setBar($('#e1-fome'), state.fome, state.fome > 70 ? '#d23636' : '#e8a13a');
     $('#e1-obj').textContent = objetivoTexto(state);
@@ -211,6 +229,7 @@ export function createHUD(container, handlers) {
     let tools = '';
     if (state.tools.coletor) tools += `<span class="chip tool">🛠️ Coletor x${state.tools.coletor}</span>`;
     if (state.tools.tocha) tools += `<span class="chip tool">🔦 Tocha</span>`;
+    if (state.tools.arma) tools += `<span class="chip tool">🏏 Bastão</span>`;
     $('#e1-inv').innerHTML = (chips || '<span class="chip vazio">mochila vazia</span>') + tools;
 
     drawMinimap(state);

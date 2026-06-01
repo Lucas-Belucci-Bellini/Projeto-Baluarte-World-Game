@@ -1,7 +1,9 @@
 [
-  { "id": "coletor",  "nome": "Coletor",  "icon": "🛠️", "tipo": "ferramenta", "entradas": { "sucata": 3 },             "tempo": 2, "efeito": { "coleta": 1 }, "desc": "Coleta +1 por vez (ferramenta permanente)." },
-  { "id": "tocha",    "nome": "Tocha",    "icon": "🔦", "tipo": "ferramenta", "entradas": { "sucata": 1, "fibra": 1 }, "tempo": 1, "efeito": { "luz": 1 },    "desc": "Ilumina mais ao seu redor à noite." },
-  { "id": "refeicao", "nome": "Refeição", "icon": "🍲", "tipo": "consumivel", "entradas": { "organico": 2 },           "tempo": 1, "efeito": { "fome": -45 }, "desc": "Cozinha orgânico e mata a fome." },
-  { "id": "fogueira", "nome": "Fogueira", "icon": "🔥", "tipo": "estrutura",  "entradas": { "sucata": 2, "fibra": 2 }, "tempo": 2, "efeito": { "calor": 1 }, "desc": "Aquece à noite (raio de calor)." },
-  { "id": "abrigo",   "nome": "Abrigo",   "icon": "⛺", "tipo": "estrutura",  "entradas": { "sucata": 6, "fibra": 4 }, "tempo": 3, "efeito": { "abrigo": 1 }, "desc": "Protege do frio da noite — a chave para sobreviver." }
+  { "id": "coletor",  "nome": "Coletor",          "icon": "🛠️", "tipo": "ferramenta", "entradas": { "sucata": 3 },                           "tempo": 2, "efeito": { "coleta": 1 },                "desc": "Coleta +1 por vez (ferramenta permanente)." },
+  { "id": "tocha",    "nome": "Tocha",            "icon": "🔦", "tipo": "ferramenta", "entradas": { "sucata": 1, "fibra": 1 },               "tempo": 1, "efeito": { "luz": 1 },                   "desc": "Ilumina mais ao seu redor à noite." },
+  { "id": "bastao",   "nome": "Bastão de sucata", "icon": "🏏", "tipo": "arma",       "entradas": { "sucata": 2, "fibra": 1 },               "tempo": 1, "efeito": { "dano": 25, "alcance": 46 }, "desc": "Defenda-se dos espreitadores (ataque: Espaço / ⚔️)." },
+  { "id": "refeicao", "nome": "Refeição",         "icon": "🍲", "tipo": "consumivel", "entradas": { "organico": 2 },                         "tempo": 1, "efeito": { "fome": -45 },               "desc": "Cozinha orgânico e mata a fome." },
+  { "id": "fogueira", "nome": "Fogueira",         "icon": "🔥", "tipo": "estrutura",  "entradas": { "sucata": 2, "fibra": 2 },               "tempo": 2, "efeito": { "calor": 1 },                "desc": "Aquece à noite (raio de calor)." },
+  { "id": "abrigo",   "nome": "Abrigo",           "icon": "⛺", "tipo": "estrutura",  "entradas": { "sucata": 6, "fibra": 4 },               "tempo": 3, "efeito": { "abrigo": 1 },               "desc": "Protege do frio da noite." },
+  { "id": "baliza",   "nome": "Baliza de Resgate","icon": "📡", "tipo": "estrutura",  "entradas": { "sucata": 10, "fibra": 6, "cristal": 4 },"tempo": 4, "efeito": { "baliza": 1 },               "desc": "Sinaliza a frota — erguê-la prepara o recomeço (vitória da Era 1)." }
 ]

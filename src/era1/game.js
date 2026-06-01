@@ -8,10 +8,10 @@
  * `startEra1(root)` monta tudo dentro de `root` e devolve um teardown().
  */
 
-import { RECIPE, RESOURCE, CREATURES } from '../engine/data1.js';
+import { RECIPE, RESOURCE, CREATURE, CREATURES } from '../engine/data1.js';
 import {
   DIA_SEGUNDOS, faseDoDia, ehNoite, fomeApos, energiaApos, estaFaminto,
-  podeCraftar, craftar, aplicarConsequencia, INDICE_INICIAL,
+  vidaApos, podeRegenerar, podeCraftar, craftar, aplicarConsequencia, INDICE_INICIAL,
 } from '../engine/survival.js';
 import { gerarMundo } from './world.js';
 import { render } from './render.js';
@@ -19,9 +19,12 @@ import { createHUD } from './hud.js';
 
 const VEL_JOGADOR = 96;   // px/s
 const VEL_NPC = 82;
+const VEL_HOSTIL_BASE = 34;
 const RAIO_COLETA = 38;   // px
 const RAIO_FOGUEIRA = 28 * 3.6;
 const RAIO_ABRIGO = 28 * 2.2;
+const CONTATO_HOSTIL = 20; // px para acertar um alvo
+const DANO_CD = 1.0;       // s entre golpes de um hostil
 
 export function startEra1(root) {
   root.innerHTML = `<canvas class="e1-canvas"></canvas><div class="e1-hud"></div>`;
@@ -36,13 +39,14 @@ export function startEra1(root) {
   const state = {
     player: { x: spawnPx.x, y: spawnPx.y, dx: 0, dy: 1 },
     npcs: [
-      { nome: 'Vega', x: spawnPx.x - 30, y: spawnPx.y, order: 'seguir', alvo: null, cd: 0 },
-      { nome: 'Rook', x: spawnPx.x + 30, y: spawnPx.y, order: 'seguir', alvo: null, cd: 0 },
+      { nome: 'Vega', x: spawnPx.x - 30, y: spawnPx.y, order: 'seguir', alvo: null, cd: 0, vida: 60, viva: true },
+      { nome: 'Rook', x: spawnPx.x + 30, y: spawnPx.y, order: 'seguir', alvo: null, cd: 0, vida: 60, viva: true },
     ],
     creatures: [],
     structures: [],
     inventory: {},
-    tools: { coletor: 0, tocha: 0 },
+    tools: { coletor: 0, tocha: 0, arma: null },
+    vida: 100,
     fome: 10,
     energia: 100,
     indice: INDICE_INICIAL,
@@ -51,6 +55,8 @@ export function startEra1(root) {
     visRaio: 6,
     dpad: { x: 0, y: 0 },
     frio: false,
+    noiteAtiva: false,
+    sobreviveuNoite: false,
     pausado: true, // espera o tutorial inicial
     acabou: false,
     venceu: false,
@@ -74,6 +80,7 @@ export function startEra1(root) {
     if (['arrowup', 'arrowdown', 'arrowleft', 'arrowright', ' '].includes(k)) e.preventDefault();
     keys.add(k);
     if (k === 'e') interagir();
+    if (k === ' ') atacar();
     if (k === 'c') { hud.fecharPainel(); abrirCraft(); }
     if (k === 't') { hud.fecharPainel(); abrirComando(); }
     if (k === 'escape') hud.fecharPainel();
@@ -98,8 +105,9 @@ export function startEra1(root) {
   const hud = createHUD(hudEl, {
     menu: () => { if (handlers.onMenu) handlers.onMenu(); },
     interact: interagir,
+    attack: atacar,
     craft: (id) => { craftar_(id); },
-    command: (ordem) => state.npcs.forEach((n) => { n.order = ordem; n.alvo = null; }),
+    command: (ordem) => state.npcs.forEach((n) => { if (n.viva) { n.order = ordem; n.alvo = null; } }),
     dpad: (x, y) => { state.dpad.x = x; state.dpad.y = y; },
     restart: () => { if (handlers.onRestart) handlers.onRestart(); },
   });
@@ -150,10 +158,14 @@ export function startEra1(root) {
     } else if (r.tipo === 'consumivel') {
       state.fome = Math.max(0, Math.min(100, state.fome + (r.efeito.fome || 0)));
       hud.toast(`${r.nome}: fome saciada.`);
+    } else if (r.tipo === 'arma') {
+      state.tools.arma = { dano: r.efeito.dano, alcance: r.efeito.alcance };
+      consequencia('reaproveitou');
+      hud.toast(`${r.nome} pronto! Ataque com Espaço / ⚔️.`);
     } else if (r.tipo === 'estrutura') {
       state.structures.push({ tipo: r.id, x: state.player.x, y: state.player.y });
-      consequencia('reaproveitou');
-      hud.toast(`${r.nome} erguido aqui.`);
+      if (r.efeito.baliza) { consequencia('recomeco_preparado'); vencer('baliza'); }
+      else { consequencia('reaproveitou'); hud.toast(`${r.nome} erguido aqui.`); }
     }
   }
 
@@ -164,6 +176,71 @@ export function startEra1(root) {
       if ((s.x - x) ** 2 + (s.y - y) ** 2 <= raio * raio) return true;
     }
     return false;
+  }
+
+  /* ===== Combate ===== */
+  function atacar() {
+    if (state.acabou || state.pausado) return;
+    const arma = state.tools.arma;
+    if (!arma) { hud.toast('Sem arma. Crafte um Bastão (C).'); return; }
+    let alvo = null, md = arma.alcance * arma.alcance;
+    for (const c of state.creatures) {
+      if (c.comp !== 'hostil') continue;
+      const d = (c.x - state.player.x) ** 2 + (c.y - state.player.y) ** 2;
+      if (d < md) { md = d; alvo = c; }
+    }
+    if (!alvo) return;
+    alvo.hp -= arma.dano;
+    if (alvo.hp <= 0) {
+      state.creatures.splice(state.creatures.indexOf(alvo), 1);
+      hud.toast(`${CREATURE[alvo.tipo].nome} abatido.`);
+    }
+  }
+
+  function alvosVivos() {
+    const arr = [{ tipo: 'player', x: state.player.x, y: state.player.y }];
+    for (const n of state.npcs) if (n.viva) arr.push({ tipo: 'npc', ref: n, x: n.x, y: n.y });
+    return arr;
+  }
+
+  function aplicarDano(alvo, dano) {
+    if (alvo.tipo === 'player') {
+      state.vida = Math.max(0, state.vida - dano);
+    } else {
+      alvo.ref.vida -= dano;
+      if (alvo.ref.vida <= 0) {
+        alvo.ref.viva = false;
+        consequencia('colono_perdido');
+        hud.toast(`💀 ${alvo.ref.nome} caiu! A segunda chance recuou.`);
+      }
+    }
+  }
+
+  function spawnHostis() {
+    state.noiteAtiva = true;
+    const hostil = CREATURES.find((c) => c.comportamento === 'hostil');
+    if (!hostil) return;
+    const qtd = 2 + state.dia;
+    for (let i = 0; i < qtd; i++) {
+      const ang = Math.random() * Math.PI * 2, r = 260 + Math.random() * 160;
+      const x = state.player.x + Math.cos(ang) * r, y = state.player.y + Math.sin(ang) * r;
+      if (!world.passavel(Math.floor(x / T), Math.floor(y / T))) continue;
+      state.creatures.push({ tipo: hostil.id, x, y, vel: hostil.vel || VEL_HOSTIL_BASE, comp: 'hostil', hp: hostil.hp, dano: hostil.dano, ax: 0, ay: 0, cd: 0, golpe: 0 });
+    }
+    hud.toast('🌙 A noite caiu — espreitadores se aproximam!');
+  }
+
+  function aoMudarFase(de, para) {
+    if (para === 'noite') spawnHostis();
+    if (de === 'noite' && para !== 'noite') {
+      state.creatures = state.creatures.filter((c) => c.comp !== 'hostil');
+      state.noiteAtiva = false;
+      if (!state.sobreviveuNoite) {
+        state.sobreviveuNoite = true;
+        consequencia('sobreviveu_noite');
+        hud.toast('🌅 Sobreviveu à 1ª noite! Agora junte Cristal e erga a Baliza de Resgate.');
+      }
+    }
   }
 
   /* ===== Movimento com colisão (água é intransponível) ===== */
@@ -203,6 +280,7 @@ export function startEra1(root) {
 
   /* ===== IA das criaturas ===== */
   function atualizarCriatura(c, dt) {
+    if (c.comp === 'hostil') { atualizarHostil(c, dt); return; }
     c.cd -= dt;
     const dxp = state.player.x - c.x, dyp = state.player.y - c.y, dp = Math.hypot(dxp, dyp);
     if (c.comp === 'passiva' && dp < 80) {
@@ -213,6 +291,17 @@ export function startEra1(root) {
     mover(c, c.ax * c.vel, c.ay * c.vel, dt);
   }
 
+  function atualizarHostil(c, dt) {
+    c.golpe = (c.golpe || 0) - dt;
+    const alvos = alvosVivos();
+    let alvo = null, md = Infinity;
+    for (const a of alvos) { const d = (a.x - c.x) ** 2 + (a.y - c.y) ** 2; if (d < md) { md = d; alvo = a; } }
+    if (!alvo) return;
+    const dx = alvo.x - c.x, dy = alvo.y - c.y, d = Math.hypot(dx, dy) || 1;
+    if (d <= CONTATO_HOSTIL) { if (c.golpe <= 0) { c.golpe = DANO_CD; aplicarDano(alvo, c.dano); } }
+    else mover(c, (dx / d) * c.vel, (dy / d) * c.vel, dt);
+  }
+
   /* ===== Loop ===== */
   function resize() {
     canvas.width = root.clientWidth || 800;
@@ -221,6 +310,7 @@ export function startEra1(root) {
   window.addEventListener('resize', resize);
   resize();
 
+  let faseAnterior = faseDoDia(state.clock);
   let raf = 0, last = performance.now();
   function frame(now) {
     let dt = (now - last) / 1000; last = now;
@@ -233,20 +323,25 @@ export function startEra1(root) {
       mover(state.player, mv.x * VEL_JOGADOR, mv.y * VEL_JOGADOR, dt);
       world.revelar(Math.floor(state.player.x / T), Math.floor(state.player.y / T), state.visRaio);
 
-      state.npcs.forEach((n) => atualizarNPC(n, dt));
+      state.npcs.forEach((n) => { if (n.viva) atualizarNPC(n, dt); });
       state.creatures.forEach((c) => atualizarCriatura(c, dt));
 
       // Medidores
       state.fome = fomeApos(state.fome, dt);
       state.frio = ehNoite(state.clock) && !aquecido(state.player.x, state.player.y);
-      state.energia = energiaApos(state.energia, dt, { faminto: estaFaminto(state.fome), frio: state.frio });
+      const faminto = estaFaminto(state.fome);
+      state.energia = energiaApos(state.energia, dt, { faminto, frio: state.frio });
+      state.vida = vidaApos(state.vida, dt, podeRegenerar({ faminto, frio: state.frio, energia: state.energia }));
 
-      // Tempo + vitória/derrota
-      const antes = state.clock;
+      // Tempo + transições de fase (dia/noite)
       state.clock += dt / DIA_SEGUNDOS;
-      if (state.clock >= 1) { state.clock -= 1; state.dia += 1; vencer(); }
-      if (state.energia <= 0) perder();
-      void antes;
+      if (state.clock >= 1) { state.clock -= 1; state.dia += 1; }
+      const fase = faseDoDia(state.clock);
+      if (fase !== faseAnterior) { aoMudarFase(faseAnterior, fase); faseAnterior = fase; }
+
+      // Derrota
+      if (state.energia <= 0) perder('energia');
+      else if (state.vida <= 0) perder('vida');
     }
 
     render(ctx, world, state);
@@ -254,17 +349,16 @@ export function startEra1(root) {
     raf = requestAnimationFrame(frame);
   }
 
-  function vencer() {
+  function vencer(motivo) {
     if (state.acabou) return;
     state.acabou = true; state.venceu = true;
-    consequencia('sobreviveu_noite');
-    hud.showEnd(true, state);
+    hud.showEnd(true, state, motivo);
   }
-  function perder() {
+  function perder(motivo) {
     if (state.acabou) return;
     state.acabou = true; state.venceu = false;
     consequencia('colapso');
-    hud.showEnd(false, state);
+    hud.showEnd(false, state, motivo);
   }
 
   raf = requestAnimationFrame(frame);

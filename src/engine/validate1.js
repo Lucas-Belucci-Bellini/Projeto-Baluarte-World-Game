@@ -37,9 +37,13 @@ export function validateEra1({ biomes, resources, recipes, creatures }) {
     });
   });
 
-  // Precisa existir pelo menos um abrigo (condição de vitória da Era 1).
+  // Precisa existir pelo menos um abrigo (sobreviver à noite).
   if (!recipes.some((r) => r.efeito && r.efeito.abrigo)) {
     problems.push('Nenhuma receita concede "abrigo" — impossível sobreviver à noite.');
+  }
+  // Precisa existir a baliza (condição de vitória da Era 1).
+  if (!recipes.some((r) => r.efeito && r.efeito.baliza)) {
+    problems.push('Nenhuma receita concede "baliza" — Era 1 sem condição de vitória.');
   }
 
   // Criaturas com comportamento válido.

@@ -58,6 +58,18 @@ export function energiaApos(energia, dt, { faminto = false, frio = false } = {})
 
 export function estaFaminto(fome) { return fome >= FOME_LIMITE; }
 
+/* ===== Vida (dano vem de eventos; aqui só a regeneração quando seguro) ===== */
+export const VIDA_REGEN = 2.2; // vida/seg quando pode regenerar
+
+/** Pode regenerar vida se não está faminto, nem com frio, e tem energia. */
+export function podeRegenerar({ faminto, frio, energia }) {
+  return !faminto && !frio && energia > 20;
+}
+
+export function vidaApos(vida, dt, podeRegen) {
+  return clamp(vida + (podeRegen ? VIDA_REGEN : 0) * dt, 0, 100);
+}
+
 /* ===== Crafting ===== */
 export function podeCraftar(receita, inv) {
   return Object.entries(receita.entradas).every(([rid, q]) => (inv[rid] || 0) >= q);
@@ -74,7 +86,8 @@ export function craftar(receita, inv) {
 export const INDICE_INICIAL = 50;
 export const CONSEQUENCIA = {
   sobreviveu_noite: +12,
-  reaproveitou: +1,    // craftar a partir de sucata
+  reaproveitou: +1,          // craftar a partir de sucata
+  recomeco_preparado: +18,   // erguer a Baliza de Resgate
   colono_perdido: -20,
   colapso: -25,
 };

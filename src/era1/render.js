@@ -81,12 +81,18 @@ export function render(ctx, world, state) {
   // --- Criaturas ---
   for (const c of state.creatures) {
     const sx = c.x - camX, sy = c.y - camY;
-    disco(ctx, sx, sy, 7, CREATURE[c.tipo].cor);
-    ctx.strokeStyle = 'rgba(0,0,0,0.5)'; ctx.lineWidth = 2; ctx.stroke();
+    const hostil = c.comp === 'hostil';
+    disco(ctx, sx, sy, hostil ? 8 : 7, CREATURE[c.tipo].cor);
+    ctx.strokeStyle = hostil ? '#3a0a06' : 'rgba(0,0,0,0.5)'; ctx.lineWidth = hostil ? 2.5 : 2; ctx.stroke();
+    if (hostil) { // olhos
+      ctx.fillStyle = '#ffd2cc';
+      disco(ctx, sx - 2.5, sy - 1, 1.4, '#ffd2cc'); disco(ctx, sx + 2.5, sy - 1, 1.4, '#ffd2cc');
+    }
   }
 
   // --- Colonos (NPCs) ---
   for (const n of state.npcs) {
+    if (!n.viva) continue;
     const sx = n.x - camX, sy = n.y - camY;
     disco(ctx, sx, sy, 8, '#2f9d8f');
     ctx.lineWidth = 2; ctx.strokeStyle = '#0c2b27'; ctx.stroke();

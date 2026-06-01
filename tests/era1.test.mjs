@@ -12,7 +12,7 @@ import { dirname, join } from 'node:path';
 import { validateEra1 } from '../src/engine/validate1.js';
 import {
   faseDoDia, ehNoite, fomeApos, energiaApos, estaFaminto,
-  podeCraftar, craftar, aplicarConsequencia, INDICE_INICIAL,
+  vidaApos, podeRegenerar, podeCraftar, craftar, aplicarConsequencia, INDICE_INICIAL,
 } from '../src/engine/survival.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -31,9 +31,13 @@ const problems = validateEra1({ biomes, resources, recipes, creatures });
 ok(problems.length === 0, 'invariantes Era 1: ' + (problems.join(' | ') || 'OK'));
 eq(biomes.length, 4, 'biomas = 4');
 eq(resources.length, 4, 'recursos = 4');
-eq(recipes.length, 5, 'receitas = 5');
+eq(recipes.length, 7, 'receitas = 7');
+eq(creatures.length, 3, 'criaturas = 3');
 ok(recipes.some((r) => r.efeito && r.efeito.abrigo), 'existe receita de abrigo');
 ok(recipes.some((r) => r.efeito && r.efeito.luz), 'existe a tocha (luz)');
+ok(recipes.some((r) => r.efeito && r.efeito.baliza), 'existe a baliza (vitória)');
+ok(recipes.some((r) => r.tipo === 'arma' && r.efeito.dano > 0), 'existe arma com dano');
+ok(creatures.some((c) => c.comportamento === 'hostil'), 'existe criatura hostil');
 
 /* ===== Ciclo dia-noite ===== */
 eq(faseDoDia(0.3), 'dia', 'meio-dia = dia');
@@ -54,6 +58,15 @@ ok(energiaApos(50, 5, { frio: true }) < 50, 'frio dreno energia');
 ok(energiaApos(50, 5, {}) > 50, 'ok regenera energia');
 eq(energiaApos(1, 100, { frio: true, faminto: true }), 0, 'energia satura em 0');
 eq(energiaApos(99, 100, {}), 100, 'energia satura em 100');
+
+/* ===== Vida ===== */
+ok(podeRegenerar({ faminto: false, frio: false, energia: 50 }), 'regenera quando seguro');
+ok(!podeRegenerar({ faminto: true, frio: false, energia: 50 }), 'não regenera com fome');
+ok(!podeRegenerar({ faminto: false, frio: true, energia: 50 }), 'não regenera com frio');
+ok(!podeRegenerar({ faminto: false, frio: false, energia: 10 }), 'não regenera sem energia');
+ok(vidaApos(50, 5, true) > 50, 'vida sobe quando pode regenerar');
+eq(vidaApos(50, 5, false), 50, 'vida estável quando não pode');
+eq(vidaApos(99, 100, true), 100, 'vida satura em 100');
 
 /* ===== Crafting ===== */
 const fogueira = recipes.find((r) => r.id === 'fogueira'); // sucata2 + fibra2

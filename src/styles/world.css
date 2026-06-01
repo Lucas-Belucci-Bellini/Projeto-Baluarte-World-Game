@@ -69,6 +69,7 @@
 }
 .e1-btn:hover { filter: brightness(1.08); }
 .e1-btn.ghost { background: transparent; border: 1px solid #2c4258; color: #aebfce; }
+.e1-btn.danger { background: #d23636; color: #fff; }
 
 .e1-meters { position: absolute; top: 48px; left: 8px; display: grid; gap: 6px; width: min(260px, 56%); }
 .e1-meter {

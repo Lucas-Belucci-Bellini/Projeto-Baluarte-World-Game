@@ -1,4 +1,5 @@
 [
-  { "id": "lumaco",     "nome": "Lumaço",     "cor": "#8fd6c0", "comportamento": "passiva", "vel": 22, "desc": "Herbívoro tímido; foge do colono." },
-  { "id": "rastejante", "nome": "Rastejante", "cor": "#c08ad0", "comportamento": "neutra",  "vel": 16, "desc": "Indiferente, mas reage se acuado. Aliável em Eras futuras." }
+  { "id": "lumaco",      "nome": "Lumaço",      "cor": "#8fd6c0", "comportamento": "passiva", "vel": 22, "desc": "Herbívoro tímido; foge do colono." },
+  { "id": "rastejante",  "nome": "Rastejante",  "cor": "#c08ad0", "comportamento": "neutra",  "vel": 16, "desc": "Indiferente, mas reage se acuado. Aliável em Eras futuras." },
+  { "id": "espreitador", "nome": "Espreitador", "cor": "#d2483a", "comportamento": "hostil",  "vel": 36, "hp": 40, "dano": 9, "desc": "Caça à noite e some ao amanhecer. Defenda-se e proteja os colonos." }
 ]
