@@ -75,6 +75,15 @@ export function render(ctx, world, state) {
       ctx.fillStyle = '#8a5a33'; ctx.strokeStyle = '#000'; ctx.lineWidth = 2;
       ctx.beginPath(); ctx.moveTo(sx, sy - 12); ctx.lineTo(sx + 12, sy + 8); ctx.lineTo(sx - 12, sy + 8); ctx.closePath();
       ctx.fill(); ctx.stroke();
+    } else if (s.tipo === 'horta') {
+      ctx.fillStyle = '#5a3e22'; ctx.strokeStyle = '#000'; ctx.lineWidth = 2;
+      ctx.fillRect(sx - 10, sy - 1, 20, 9); ctx.strokeRect(sx - 10, sy - 1, 20, 9);
+      ctx.strokeStyle = '#7fd06a'; ctx.lineWidth = 2;
+      for (let i = -1; i <= 1; i++) { ctx.beginPath(); ctx.moveTo(sx + i * 6, sy + 3); ctx.lineTo(sx + i * 6, sy - 7); ctx.stroke(); }
+    } else if (s.tipo === 'baliza') {
+      ctx.strokeStyle = '#46c7e8'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(sx - 9, sy + 11); ctx.lineTo(sx, sy - 15); ctx.lineTo(sx + 9, sy + 11); ctx.stroke();
+      disco(ctx, sx, sy - 15, 3.5, '#9fe8ff');
     }
   }
 
@@ -82,11 +91,16 @@ export function render(ctx, world, state) {
   for (const c of state.creatures) {
     const sx = c.x - camX, sy = c.y - camY;
     const hostil = c.comp === 'hostil';
-    disco(ctx, sx, sy, hostil ? 8 : 7, CREATURE[c.tipo].cor);
-    ctx.strokeStyle = hostil ? '#3a0a06' : 'rgba(0,0,0,0.5)'; ctx.lineWidth = hostil ? 2.5 : 2; ctx.stroke();
-    if (hostil) { // olhos
-      ctx.fillStyle = '#ffd2cc';
+    const aliado = c.comp === 'aliado';
+    disco(ctx, sx, sy, hostil ? 8 : 7, aliado ? '#5fd08a' : CREATURE[c.tipo].cor);
+    ctx.strokeStyle = hostil ? '#3a0a06' : aliado ? '#0c3a22' : 'rgba(0,0,0,0.5)';
+    ctx.lineWidth = (hostil || aliado) ? 2.5 : 2; ctx.stroke();
+    if (hostil) {
       disco(ctx, sx - 2.5, sy - 1, 1.4, '#ffd2cc'); disco(ctx, sx + 2.5, sy - 1, 1.4, '#ffd2cc');
+    }
+    if (aliado) {
+      ctx.fillStyle = '#dffaf0'; ctx.font = '9px Nunito, sans-serif'; ctx.textAlign = 'center';
+      ctx.fillText('aliado', sx, sy - 11);
     }
   }
 
@@ -106,6 +120,15 @@ export function render(ctx, world, state) {
   ctx.lineWidth = 2.5; ctx.strokeStyle = '#3a2a05'; ctx.stroke();
   // indicador de direção
   disco(ctx, pcx + state.player.dx * 9, pcy + state.player.dy * 9, 3, '#3a2a05');
+
+  // --- Prévia de construção (modo posicionamento) ---
+  if (state.ghost) {
+    const gx = state.ghost.x - camX, gy = state.ghost.y - camY;
+    const cor = state.ghost.valido ? '#5fd08a' : '#d23636';
+    ctx.globalAlpha = 0.5; disco(ctx, gx, gy, 11, cor); ctx.globalAlpha = 1;
+    ctx.strokeStyle = cor; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(gx, gy, 13, 0, Math.PI * 2); ctx.stroke();
+  }
 
   // --- Noite: escuridão com luzes ---
   const dark = escuridao(state.clock);

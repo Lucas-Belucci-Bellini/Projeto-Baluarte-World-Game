@@ -1,7 +1,7 @@
 {
   "name": "projeto-baluarte-world-game",
   "private": true,
-  "version": "0.6.0",
+  "version": "0.7.0",
   "type": "module",
   "description": "Baluarte World Game — Segunda Chance: jogo de sobrevivência e consequência do universo Baluarte. Stack: JS puro + Vite.",
   "scripts": {

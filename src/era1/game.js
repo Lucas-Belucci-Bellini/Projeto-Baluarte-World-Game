@@ -57,6 +57,8 @@ export function startEra1(root) {
     frio: false,
     noiteAtiva: false,
     sobreviveuNoite: false,
+    placing: null, // receita de estrutura aguardando posicionamento
+    ghost: null,   // { x, y, valido } prévia da construção
     pausado: true, // espera o tutorial inicial
     acabou: false,
     venceu: false,
@@ -81,9 +83,10 @@ export function startEra1(root) {
     keys.add(k);
     if (k === 'e') interagir();
     if (k === ' ') atacar();
+    if (k === 'f') alimentar();
     if (k === 'c') { hud.fecharPainel(); abrirCraft(); }
     if (k === 't') { hud.fecharPainel(); abrirComando(); }
-    if (k === 'escape') hud.fecharPainel();
+    if (k === 'escape') { if (!cancelarPlacing()) hud.fecharPainel(); }
   };
   const onKeyUp = (e) => keys.delete(e.key.toLowerCase());
   window.addEventListener('keydown', onKeyDown);
@@ -106,6 +109,8 @@ export function startEra1(root) {
     menu: () => { if (handlers.onMenu) handlers.onMenu(); },
     interact: interagir,
     attack: atacar,
+    ally: alimentar,
+    cancel: cancelarPlacing,
     craft: (id) => { craftar_(id); },
     command: (ordem) => state.npcs.forEach((n) => { if (n.viva) { n.order = ordem; n.alvo = null; } }),
     dpad: (x, y) => { state.dpad.x = x; state.dpad.y = y; },
@@ -135,7 +140,8 @@ export function startEra1(root) {
   }
 
   function interagir() {
-    if (state.acabou) return;
+    if (state.acabou || state.pausado) return;
+    if (state.placing) { confirmarConstrucao(); return; }
     const n = nodeMaisProximo(state.player.x, state.player.y, RAIO_COLETA);
     if (!n) { hud.toast('Nada para coletar por perto.'); return; }
     const qtd = Math.min(n.qtd, 1 + state.tools.coletor);
@@ -148,8 +154,13 @@ export function startEra1(root) {
   function craftar_(id) {
     if (state.acabou) return;
     const r = RECIPE[id];
-    if (!r) return;
-    if (!podeCraftar(r, state.inventory)) { hud.toast('Faltam recursos.'); return; }
+    if (!r || !podeCraftar(r, state.inventory)) { hud.toast('Faltam recursos.'); return; }
+    if (r.tipo === 'estrutura') {
+      state.placing = r; // entra no modo posicionar (consome só ao confirmar)
+      hud.fecharPainel();
+      hud.toast(`Posicione ${r.nome}: ande para mirar · ✋/E confirma · Esc cancela.`);
+      return;
+    }
     state.inventory = craftar(r, state.inventory);
     if (r.tipo === 'ferramenta') {
       if (r.efeito.luz) { state.tools.tocha = 1; hud.toast(`${r.nome} pronta! Mais luz à noite.`); }
@@ -162,10 +173,52 @@ export function startEra1(root) {
       state.tools.arma = { dano: r.efeito.dano, alcance: r.efeito.alcance };
       consequencia('reaproveitou');
       hud.toast(`${r.nome} pronto! Ataque com Espaço / ⚔️.`);
-    } else if (r.tipo === 'estrutura') {
-      state.structures.push({ tipo: r.id, x: state.player.x, y: state.player.y });
-      if (r.efeito.baliza) { consequencia('recomeco_preparado'); vencer('baliza'); }
-      else { consequencia('reaproveitou'); hud.toast(`${r.nome} erguido aqui.`); }
+    }
+  }
+
+  /* ===== Posicionamento de estruturas ===== */
+  function ghostPos() {
+    const dx = state.player.dx || 0, dy = state.player.dy || 1;
+    return { x: state.player.x + dx * T * 1.6, y: state.player.y + dy * T * 1.6 };
+  }
+  function confirmarConstrucao() {
+    const r = state.placing; if (!r) return;
+    const g = ghostPos();
+    if (!world.passavel(Math.floor(g.x / T), Math.floor(g.y / T))) { hud.toast('Lugar inválido (água/borda).'); return; }
+    if (!podeCraftar(r, state.inventory)) { hud.toast('Faltam recursos.'); state.placing = null; return; }
+    state.inventory = craftar(r, state.inventory);
+    state.structures.push({ tipo: r.id, x: g.x, y: g.y });
+    state.placing = null; state.ghost = null;
+    if (r.efeito.baliza) { consequencia('recomeco_preparado'); vencer('baliza'); return; }
+    consequencia('reaproveitou');
+    hud.toast(`${r.nome} erguido.`);
+  }
+  function cancelarPlacing() {
+    if (!state.placing) return false;
+    state.placing = null; state.ghost = null;
+    hud.toast('Construção cancelada.');
+    return true;
+  }
+
+  /* ===== Domesticar (pilar Ark): alimenta neutra → aliada que luta ===== */
+  const TAME_RAIO = 48;
+  function alimentar() {
+    if (state.acabou || state.pausado) return;
+    if ((state.inventory.organico || 0) <= 0) { hud.toast('Precisa de Orgânico para aliar.'); return; }
+    let alvo = null, md = TAME_RAIO * TAME_RAIO;
+    for (const c of state.creatures) {
+      if (c.comp !== 'neutra') continue;
+      const d = (c.x - state.player.x) ** 2 + (c.y - state.player.y) ** 2;
+      if (d < md) { md = d; alvo = c; }
+    }
+    if (!alvo) { hud.toast('Nenhuma criatura neutra por perto.'); return; }
+    state.inventory.organico -= 1;
+    alvo.tame = (alvo.tame || 0) + 1;
+    if (alvo.tame >= 3) {
+      alvo.comp = 'aliado'; alvo.hp = 45; alvo.golpe = 0;
+      hud.toast(`${CREATURE[alvo.tipo].nome} virou seu aliado! 🤝 Vai lutar com você.`);
+    } else {
+      hud.toast(`Alimentou (${alvo.tame}/3) — continue para aliar.`);
     }
   }
 
@@ -200,18 +253,26 @@ export function startEra1(root) {
   function alvosVivos() {
     const arr = [{ tipo: 'player', x: state.player.x, y: state.player.y }];
     for (const n of state.npcs) if (n.viva) arr.push({ tipo: 'npc', ref: n, x: n.x, y: n.y });
+    for (const c of state.creatures) if (c.comp === 'aliado') arr.push({ tipo: 'aliado', ref: c, x: c.x, y: c.y });
     return arr;
   }
 
   function aplicarDano(alvo, dano) {
     if (alvo.tipo === 'player') {
       state.vida = Math.max(0, state.vida - dano);
-    } else {
+    } else if (alvo.tipo === 'npc') {
       alvo.ref.vida -= dano;
       if (alvo.ref.vida <= 0) {
         alvo.ref.viva = false;
         consequencia('colono_perdido');
         hud.toast(`💀 ${alvo.ref.nome} caiu! A segunda chance recuou.`);
+      }
+    } else if (alvo.tipo === 'aliado') {
+      alvo.ref.hp -= dano;
+      if (alvo.ref.hp <= 0) {
+        const i = state.creatures.indexOf(alvo.ref);
+        if (i >= 0) state.creatures.splice(i, 1);
+        hud.toast('Seu aliado caiu.');
       }
     }
   }
@@ -281,6 +342,7 @@ export function startEra1(root) {
   /* ===== IA das criaturas ===== */
   function atualizarCriatura(c, dt) {
     if (c.comp === 'hostil') { atualizarHostil(c, dt); return; }
+    if (c.comp === 'aliado') { atualizarAliado(c, dt); return; }
     c.cd -= dt;
     const dxp = state.player.x - c.x, dyp = state.player.y - c.y, dp = Math.hypot(dxp, dyp);
     if (c.comp === 'passiva' && dp < 80) {
@@ -300,6 +362,25 @@ export function startEra1(root) {
     const dx = alvo.x - c.x, dy = alvo.y - c.y, d = Math.hypot(dx, dy) || 1;
     if (d <= CONTATO_HOSTIL) { if (c.golpe <= 0) { c.golpe = DANO_CD; aplicarDano(alvo, c.dano); } }
     else mover(c, (dx / d) * c.vel, (dy / d) * c.vel, dt);
+  }
+
+  function atualizarAliado(c, dt) {
+    c.golpe = (c.golpe || 0) - dt;
+    let h = null, md = (T * 6) ** 2;
+    for (const o of state.creatures) {
+      if (o.comp !== 'hostil') continue;
+      const d = (o.x - c.x) ** 2 + (o.y - c.y) ** 2;
+      if (d < md) { md = d; h = o; }
+    }
+    if (h) {
+      const dx = h.x - c.x, dy = h.y - c.y, d = Math.hypot(dx, dy) || 1;
+      if (d <= CONTATO_HOSTIL) {
+        if (c.golpe <= 0) { c.golpe = DANO_CD; h.hp -= 18; if (h.hp <= 0) { const i = state.creatures.indexOf(h); if (i >= 0) state.creatures.splice(i, 1); } }
+      } else mover(c, (dx / d) * c.vel * 1.4, (dy / d) * c.vel * 1.4, dt);
+      return;
+    }
+    const dx = state.player.x - c.x, dy = state.player.y - c.y, d = Math.hypot(dx, dy);
+    if (d > 52) mover(c, (dx / d) * c.vel * 1.2, (dy / d) * c.vel * 1.2, dt);
   }
 
   /* ===== Loop ===== */
@@ -332,6 +413,27 @@ export function startEra1(root) {
       const faminto = estaFaminto(state.fome);
       state.energia = energiaApos(state.energia, dt, { faminto, frio: state.frio });
       state.vida = vidaApos(state.vida, dt, podeRegenerar({ faminto, frio: state.frio, energia: state.energia }));
+
+      // Hortas produzem orgânico com o tempo (comida renovável)
+      for (const s of state.structures) {
+        if (s.tipo !== 'horta') continue;
+        s.cd = (s.cd == null ? 8 : s.cd) - dt;
+        if (s.cd <= 0) {
+          s.cd = 12;
+          const perto = world.nodes.filter((n) => n.res === 'organico' && (n.x * T - s.x) ** 2 + (n.y * T - s.y) ** 2 < (T * 4) ** 2).length;
+          if (perto < 3) {
+            const ang = Math.random() * Math.PI * 2, r = 1 + Math.random() * 2.5;
+            const x = Math.round(s.x / T + Math.cos(ang) * r), y = Math.round(s.y / T + Math.sin(ang) * r);
+            if (world.passavel(x, y)) world.nodes.push({ x, y, res: 'organico', qtd: 2 + Math.floor(Math.random() * 3) });
+          }
+        }
+      }
+
+      // Prévia da construção (modo posicionamento)
+      if (state.placing) {
+        const g = ghostPos();
+        state.ghost = { x: g.x, y: g.y, valido: world.passavel(Math.floor(g.x / T), Math.floor(g.y / T)) };
+      } else state.ghost = null;
 
       // Tempo + transições de fase (dia/noite)
       state.clock += dt / DIA_SEGUNDOS;

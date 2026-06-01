@@ -137,6 +137,14 @@
   border: 1px solid #24364a;
 }
 
+.e1-placing {
+  position: absolute; bottom: 130px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; align-items: center; flex-wrap: wrap; justify-content: center;
+  background: rgba(8, 14, 24, 0.94); border: 1px solid #46c7e8; border-radius: 12px;
+  padding: 6px 10px; pointer-events: auto; font-size: 13px; max-width: 92%;
+}
+.e1-placing .e1-btn { padding: 7px 10px; font-size: 13px; }
+
 .e1-end { text-align: center; }
 .e1-end h2 { margin: 4px 0 10px; }
 .e1-end.win h2 { color: #7fd0a0; }

@@ -35,8 +35,15 @@ export function createHUD(container, handlers) {
     <div class="e1-actions">
       <button class="e1-btn" data-act="interact">✋ Coletar</button>
       <button class="e1-btn danger" data-act="attack">⚔️ Atacar</button>
+      <button class="e1-btn" data-act="ally">🤝 Aliar</button>
       <button class="e1-btn" data-act="craft">🛠️ Craftar</button>
       <button class="e1-btn" data-act="command">🫡 Comando</button>
+    </div>
+
+    <div class="e1-placing hidden" id="e1-placing">
+      <span id="e1-placing-txt"></span>
+      <button class="e1-btn" id="e1-place-ok">✓ Confirmar</button>
+      <button class="e1-btn ghost" id="e1-place-cancel">Cancelar</button>
     </div>
 
     <div class="e1-panel hidden" id="e1-panel"></div>
@@ -56,6 +63,7 @@ export function createHUD(container, handlers) {
       const a = b.dataset.act;
       if (a === 'interact') handlers.interact();
       if (a === 'attack') handlers.attack();
+      if (a === 'ally') handlers.ally();
       if (a === 'craft') openCraft();
       if (a === 'command') openCommand();
     };
@@ -70,6 +78,9 @@ export function createHUD(container, handlers) {
     b.addEventListener('pointerleave', release);
     b.addEventListener('pointercancel', release);
   });
+
+  $('#e1-place-ok').onclick = () => handlers.interact();
+  $('#e1-place-cancel').onclick = () => handlers.cancel();
 
   let lastState = null;
   function fecharPainel() { panel.classList.add('hidden'); panel.innerHTML = ''; }
@@ -120,10 +131,12 @@ export function createHUD(container, handlers) {
       <p>A nave caiu num mundo desconhecido em outra galáxia. A noite vem aí — e o frio mata.
          Use os destroços (sucata) para sobreviver e dar à humanidade uma segunda chance.</p>
       <ul class="e1-intro-goals">
-        <li>✋ <b>Colete</b> Sucata e Fibra — tecla <b>E</b> (ou ✋)</li>
-        <li>🛠️ <b>Crafte</b> um <b>Abrigo</b> — tecla <b>C</b></li>
-        <li>🌙 <b>Sobreviva</b> à 1ª noite, perto do abrigo ou de uma fogueira</li>
-        <li>🫡 <b>Comande</b> os colonos pra coletar — tecla <b>T</b></li>
+        <li>✋ <b>Colete</b> Sucata e Fibra — tecla <b>E</b></li>
+        <li>🛠️ <b>Crafte e posicione</b> um <b>Abrigo</b> — tecla <b>C</b> (ande para mirar, E confirma)</li>
+        <li>🌙 <b>Sobreviva</b> à 1ª noite — ⚔️ defenda-se dos espreitadores (<b>Espaço</b>, crafte o Bastão)</li>
+        <li>🤝 <b>Alie</b> criaturas neutras com Orgânico — tecla <b>F</b> (elas lutam por você)</li>
+        <li>🫡 <b>Comande</b> os colonos — tecla <b>T</b> · 🌱 erga uma <b>Horta</b> p/ comida</li>
+        <li>📡 Junte <b>Cristal</b> e erga a <b>Baliza de Resgate</b> para vencer a Era</li>
       </ul>
       <p class="e1-intro-ctrl">Mover: <b>WASD</b> / setas — ou ◀ ▲ ▼ ▶ no toque.</p>
       <button class="e1-btn" id="e1-start">Pousar →</button>
@@ -222,6 +235,12 @@ export function createHUD(container, handlers) {
     setBar($('#e1-fome'), state.fome, state.fome > 70 ? '#d23636' : '#e8a13a');
     $('#e1-obj').textContent = objetivoTexto(state);
     $('#e1-cold').classList.toggle('hidden', !state.frio);
+
+    const placing = $('#e1-placing');
+    if (state.placing) {
+      placing.classList.remove('hidden');
+      $('#e1-placing-txt').textContent = `📐 Posicionando ${state.placing.nome} — ande para mirar`;
+    } else placing.classList.add('hidden');
 
     const inv = state.inventory;
     const chips = Object.entries(inv).filter(([, q]) => q > 0).map(([k, q]) =>
