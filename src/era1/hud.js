@@ -111,6 +111,7 @@ export function createHUD(container, handlers) {
     panel.classList.remove('hidden');
     const ordens = [
       { id: 'seguir', label: '🚶 Seguir você' },
+      { id: 'guardar', label: '🛡️ Guardar (atacar hostis perto)' },
       { id: 'coletar:sucata', label: '🔧 Coletar sucata' },
       { id: 'coletar:organico', label: '🌿 Coletar orgânico' },
       { id: 'ficar', label: '✋ Ficar parado' },
@@ -175,7 +176,7 @@ export function createHUD(container, handlers) {
     toast._t = setTimeout(() => toastEl.classList.add('hidden'), 1800);
   }
 
-  function showEnd(win, state, motivo) {
+  function showEnd(win, state, motivo, meta = {}) {
     panel.classList.remove('hidden');
     const vivos = state.npcs.filter((n) => n.viva).length;
     const titulo = win
@@ -196,6 +197,7 @@ export function createHUD(container, handlers) {
         <div class="row"><span>Fragmentos de lore</span><b>${state.lore.length}/6</b></div>
         <div class="row"><span>Índice da Segunda Chance</span><b>${Math.round(state.indice)}</b></div>
       </div>
+      <p class="e1-end-stats">🏆 Recorde: ${meta.vitorias || 0} vitória(s) em ${meta.partidas || 0} · melhor Índice ${meta.melhorIndice || 0} · melhor dia ${meta.melhorDia || 0}</p>
       <div class="e1-end-actions">
         <button class="e1-btn" id="e1-retry">↻ Tentar de novo</button>
         <button class="e1-btn ghost" id="e1-tomenu">↩ Menu</button>
@@ -234,8 +236,19 @@ export function createHUD(container, handlers) {
       }
     }
     for (const st of state.structures) {
-      miniCtx.fillStyle = st.tipo === 'fogueira' ? '#e8842a' : '#d9c08a';
+      miniCtx.fillStyle = st.tipo === 'fogueira' ? '#e8842a' : st.tipo === 'baliza' ? '#46c7e8' : '#d9c08a';
       miniCtx.fillRect((st.x / w.TILE) * sx - 1, (st.y / w.TILE) * sy - 1, 3, 3);
+    }
+    for (const wk of w.wrecks) {
+      if (wk.aberto || !w.seen[w.idx(wk.x, wk.y)]) continue;
+      miniCtx.fillStyle = '#ffd166';
+      miniCtx.fillRect(wk.x * sx - 1, wk.y * sy - 1, 3, 3);
+    }
+    for (const c of state.creatures) {
+      if (c.comp === 'hostil') miniCtx.fillStyle = '#d2483a';
+      else if (c.comp === 'aliado') miniCtx.fillStyle = '#5fd08a';
+      else continue;
+      miniCtx.fillRect((c.x / w.TILE) * sx - 1.2, (c.y / w.TILE) * sy - 1.2, 2.6, 2.6);
     }
     miniCtx.fillStyle = '#f0b315';
     miniCtx.beginPath();

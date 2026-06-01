@@ -27,6 +27,10 @@ const RAIO_ABRIGO = 28 * 2.2;
 const CONTATO_HOSTIL = 20; // px para acertar um alvo
 const DANO_CD = 1.0;       // s entre golpes de um hostil
 
+const META_KEY = 'pbwg-era1-meta-v1';
+function loadMeta() { try { return JSON.parse(localStorage.getItem(META_KEY)) || {}; } catch (e) { return {}; } }
+function saveMeta(m) { try { localStorage.setItem(META_KEY, JSON.stringify(m)); } catch (e) { /* indisponível */ } }
+
 export function startEra1(root) {
   root.innerHTML = `<canvas class="e1-canvas"></canvas><div class="e1-hud"></div>`;
   const canvas = root.querySelector('.e1-canvas');
@@ -312,7 +316,7 @@ export function startEra1(root) {
     state.noiteAtiva = true;
     const hostil = CREATURES.find((c) => c.comportamento === 'hostil');
     if (!hostil) return;
-    const qtd = 2 + state.dia;
+    const qtd = 2 + Math.min(state.dia, 5); // cap para não virar impossível
     for (let i = 0; i < qtd; i++) {
       const ang = Math.random() * Math.PI * 2, r = 260 + Math.random() * 160;
       const x = state.player.x + Math.cos(ang) * r, y = state.player.y + Math.sin(ang) * r;
@@ -345,7 +349,33 @@ export function startEra1(root) {
   }
 
   /* ===== IA dos colonos ===== */
+  // Colonos se defendem: atacam hostil adjacente; com ordem "guardar", caçam perto.
+  function npcAtacaHostil(n, dt) {
+    n.golpe = (n.golpe || 0) - dt;
+    let h = null, md = (T * 4) ** 2;
+    for (const o of state.creatures) {
+      if (o.comp !== 'hostil') continue;
+      const d = (o.x - n.x) ** 2 + (o.y - n.y) ** 2;
+      if (d < md) { md = d; h = o; }
+    }
+    if (!h) return false;
+    const dx = h.x - n.x, dy = h.y - n.y, d = Math.hypot(dx, dy) || 1;
+    if (d <= CONTATO_HOSTIL + 6) {
+      if (n.golpe <= 0) {
+        n.golpe = DANO_CD; h.hp -= 12; sfx.hit();
+        if (h.hp <= 0) { const i = state.creatures.indexOf(h); if (i >= 0) state.creatures.splice(i, 1); }
+      }
+      return true;
+    }
+    if (n.order === 'guardar' || d < T * 2.2) { // guarda persegue; senão, autodefesa de perto
+      mover(n, (dx / d) * VEL_NPC, (dy / d) * VEL_NPC, dt);
+      return true;
+    }
+    return false;
+  }
+
   function atualizarNPC(n, dt) {
+    if (npcAtacaHostil(n, dt)) return; // combate tem prioridade
     let tx = null, ty = null;
     if (n.order === 'seguir') { tx = state.player.x; ty = state.player.y; }
     else if (n.order && n.order.startsWith('coletar:')) {
@@ -483,18 +513,27 @@ export function startEra1(root) {
     raf = requestAnimationFrame(frame);
   }
 
+  function registrarMeta(win) {
+    const m = loadMeta();
+    m.partidas = (m.partidas || 0) + 1;
+    m.vitorias = (m.vitorias || 0) + (win ? 1 : 0);
+    m.melhorIndice = Math.max(m.melhorIndice || 0, Math.round(state.indice));
+    m.melhorDia = Math.max(m.melhorDia || 0, state.dia);
+    saveMeta(m);
+    return m;
+  }
   function vencer(motivo) {
     if (state.acabou) return;
     state.acabou = true; state.venceu = true;
     sfx.vitoria();
-    hud.showEnd(true, state, motivo);
+    hud.showEnd(true, state, motivo, registrarMeta(true));
   }
   function perder(motivo) {
     if (state.acabou) return;
     state.acabou = true; state.venceu = false;
     consequencia('colapso');
     sfx.derrota();
-    hud.showEnd(false, state, motivo);
+    hud.showEnd(false, state, motivo, registrarMeta(false));
   }
 
   raf = requestAnimationFrame(frame);
