@@ -31,8 +31,9 @@ const problems = validateEra1({ biomes, resources, recipes, creatures });
 ok(problems.length === 0, 'invariantes Era 1: ' + (problems.join(' | ') || 'OK'));
 eq(biomes.length, 4, 'biomas = 4');
 eq(resources.length, 4, 'recursos = 4');
-eq(recipes.length, 4, 'receitas = 4');
+eq(recipes.length, 5, 'receitas = 5');
 ok(recipes.some((r) => r.efeito && r.efeito.abrigo), 'existe receita de abrigo');
+ok(recipes.some((r) => r.efeito && r.efeito.luz), 'existe a tocha (luz)');
 
 /* ===== Ciclo dia-noite ===== */
 eq(faseDoDia(0.3), 'dia', 'meio-dia = dia');

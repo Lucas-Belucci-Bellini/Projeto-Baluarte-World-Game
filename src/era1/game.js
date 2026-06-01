@@ -42,7 +42,7 @@ export function startEra1(root) {
     creatures: [],
     structures: [],
     inventory: {},
-    tools: { coletor: 0 },
+    tools: { coletor: 0, tocha: 0 },
     fome: 10,
     energia: 100,
     indice: INDICE_INICIAL,
@@ -50,8 +50,11 @@ export function startEra1(root) {
     dia: 1,
     visRaio: 6,
     dpad: { x: 0, y: 0 },
+    frio: false,
+    pausado: true, // espera o tutorial inicial
     acabou: false,
     venceu: false,
+    world,
   };
 
   // Criaturas iniciais perto do pouso, em terra.
@@ -100,8 +103,17 @@ export function startEra1(root) {
     dpad: (x, y) => { state.dpad.x = x; state.dpad.y = y; },
     restart: () => { if (handlers.onRestart) handlers.onRestart(); },
   });
-  function abrirCraft() { craftAberto = true; hudEl.querySelector('[data-act="craft"]').click(); }
+  function abrirCraft() { hudEl.querySelector('[data-act="craft"]').click(); }
   function abrirComando() { hudEl.querySelector('[data-act="command"]').click(); }
+
+  function consequencia(evento) {
+    const antes = state.indice;
+    state.indice = aplicarConsequencia(state.indice, evento);
+    hud.flashIndice(state.indice - antes);
+  }
+
+  // Tutorial inicial: o mundo renderiza ao fundo, mas o tempo só corre ao "Pousar".
+  hud.showIntro(() => { state.pausado = false; });
 
   /* ===== Ações ===== */
   function nodeMaisProximo(x, y, raio, res = null) {
@@ -132,15 +144,15 @@ export function startEra1(root) {
     if (!podeCraftar(r, state.inventory)) { hud.toast('Faltam recursos.'); return; }
     state.inventory = craftar(r, state.inventory);
     if (r.tipo === 'ferramenta') {
-      state.tools.coletor += r.efeito.coleta || 1;
-      state.indice = aplicarConsequencia(state.indice, 'reaproveitou');
-      hud.toast(`${r.nome} pronto! Coleta melhorada.`);
+      if (r.efeito.luz) { state.tools.tocha = 1; hud.toast(`${r.nome} pronta! Mais luz à noite.`); }
+      else { state.tools.coletor += r.efeito.coleta || 1; hud.toast(`${r.nome} pronto! Coleta melhorada.`); }
+      consequencia('reaproveitou');
     } else if (r.tipo === 'consumivel') {
       state.fome = Math.max(0, Math.min(100, state.fome + (r.efeito.fome || 0)));
       hud.toast(`${r.nome}: fome saciada.`);
     } else if (r.tipo === 'estrutura') {
       state.structures.push({ tipo: r.id, x: state.player.x, y: state.player.y });
-      state.indice = aplicarConsequencia(state.indice, 'reaproveitou');
+      consequencia('reaproveitou');
       hud.toast(`${r.nome} erguido aqui.`);
     }
   }
@@ -214,7 +226,7 @@ export function startEra1(root) {
     let dt = (now - last) / 1000; last = now;
     if (dt > 0.05) dt = 0.05; // evita saltos ao voltar de aba inativa
 
-    if (!state.acabou) {
+    if (!state.acabou && !state.pausado) {
       // Movimento do jogador
       const mv = vetorMovimento();
       if (mv.x || mv.y) { state.player.dx = mv.x; state.player.dy = mv.y; }
@@ -226,8 +238,8 @@ export function startEra1(root) {
 
       // Medidores
       state.fome = fomeApos(state.fome, dt);
-      const frio = ehNoite(state.clock) && !aquecido(state.player.x, state.player.y);
-      state.energia = energiaApos(state.energia, dt, { faminto: estaFaminto(state.fome), frio });
+      state.frio = ehNoite(state.clock) && !aquecido(state.player.x, state.player.y);
+      state.energia = energiaApos(state.energia, dt, { faminto: estaFaminto(state.fome), frio: state.frio });
 
       // Tempo + vitória/derrota
       const antes = state.clock;
@@ -245,13 +257,13 @@ export function startEra1(root) {
   function vencer() {
     if (state.acabou) return;
     state.acabou = true; state.venceu = true;
-    state.indice = aplicarConsequencia(state.indice, 'sobreviveu_noite');
+    consequencia('sobreviveu_noite');
     hud.showEnd(true, state);
   }
   function perder() {
     if (state.acabou) return;
     state.acabou = true; state.venceu = false;
-    state.indice = aplicarConsequencia(state.indice, 'colapso');
+    consequencia('colapso');
     hud.showEnd(false, state);
   }
 

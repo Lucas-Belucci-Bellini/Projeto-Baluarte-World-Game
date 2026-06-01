@@ -117,7 +117,7 @@ export function render(ctx, world, state) {
       g.addColorStop(1, 'rgba(0,0,0,0)');
       lc.fillStyle = g; lc.beginPath(); lc.arc(x, y, r, 0, Math.PI * 2); lc.fill();
     };
-    luz(pcx, pcy, T * 3);
+    luz(pcx, pcy, T * (state.tools && state.tools.tocha ? 4.6 : 3));
     for (const s of state.structures) {
       if (s.tipo === 'fogueira') luz(s.x - camX, s.y - camY, T * 3.6);
       if (s.tipo === 'abrigo') luz(s.x - camX, s.y - camY, T * 2.2);

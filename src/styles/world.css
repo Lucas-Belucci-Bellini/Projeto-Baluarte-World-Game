@@ -143,3 +143,47 @@
 .e1-end p { color: #c4d2de; line-height: 1.5; }
 .e1-end-stats { color: #9fb2c4; }
 .e1-end-actions { display: flex; gap: 10px; justify-content: center; margin-top: 14px; }
+
+/* minimapa */
+.e1-minimap {
+  position: absolute; top: 92px; right: 8px; width: 120px; height: 120px;
+  border: 1px solid #24364a; border-radius: 8px; background: #04060a; opacity: 0.92;
+}
+
+/* indicador de frio */
+.e1-cold {
+  position: absolute; top: 132px; left: 8px;
+  background: rgba(40, 12, 12, 0.82); border: 1px solid #6a2530; color: #ffd2d2;
+  padding: 5px 10px; border-radius: 8px; font-size: 13px;
+  animation: e1-blink 1s steps(2) infinite;
+}
+@keyframes e1-blink { 50% { opacity: 0.5; } }
+
+/* flash do Índice da Segunda Chance */
+.e1-indice { position: relative; }
+.e1-indice-flash {
+  position: absolute; right: 8px; top: -4px; font-weight: 800; font-size: 14px;
+  pointer-events: none; animation: e1-rise 1.4s ease-out forwards;
+}
+.e1-indice-flash.up { color: #7fd0a0; }
+.e1-indice-flash.down { color: #e87f7f; }
+@keyframes e1-rise { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-22px); opacity: 0; } }
+.e1-indice.pulse { animation: e1-pulse 0.5s ease; }
+@keyframes e1-pulse { 50% { transform: scale(1.06); } }
+
+/* tutorial inicial */
+.e1-intro {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: rgba(4, 7, 14, 0.82); backdrop-filter: blur(3px); pointer-events: auto; padding: 18px;
+}
+.e1-intro-card {
+  max-width: 480px; background: rgba(12, 18, 30, 0.97); border: 1px solid #24364a;
+  border-radius: 18px; padding: 24px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.e1-intro-card .kick { letter-spacing: 2px; font-size: 11px; color: #5fb0d8; font-weight: 700; }
+.e1-intro-card h2 { margin: 6px 0 10px; }
+.e1-intro-card p { color: #bcccdb; line-height: 1.5; font-size: 14px; }
+.e1-intro-goals { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 7px; }
+.e1-intro-goals li { background: #101a2a; border: 1px solid #22344a; border-radius: 10px; padding: 8px 12px; font-size: 14px; }
+.e1-intro-ctrl { color: #9fb2c4; font-size: 13px; }
+.e1-intro-card .e1-btn { margin-top: 8px; width: 100%; font-size: 16px; padding: 12px; }

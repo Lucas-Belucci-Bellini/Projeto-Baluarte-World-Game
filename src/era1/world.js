@@ -67,6 +67,19 @@ export function gerarMundo(W = 64, H = 64) {
       for (let x = 3; x < W - 3; x++) if (passavel(x, y)) { spawn = { x, y }; break; }
   }
 
+  // Cache inicial: destroços da própria nave perto do pouso. Garante sucata +
+  // fibra suficientes para erguer o abrigo sem precisar achar floresta de cara.
+  const cache = ['sucata', 'sucata', 'sucata', 'fibra', 'fibra', 'organico'];
+  let c = 0, tCache = 0;
+  while (c < 14 && tCache < 600) {
+    tCache++;
+    const ang = Math.random() * Math.PI * 2, r = 2 + Math.random() * 5;
+    const x = Math.round(spawn.x + Math.cos(ang) * r), y = Math.round(spawn.y + Math.sin(ang) * r);
+    if (!passavel(x, y)) continue;
+    nodes.push({ x, y, res: cache[c % cache.length], qtd: 2 + rnd(3) });
+    c++;
+  }
+
   return {
     W, H, TILE, tiles, nodes, seen, spawn,
     idx, dentro, biomaEm, passavel,
