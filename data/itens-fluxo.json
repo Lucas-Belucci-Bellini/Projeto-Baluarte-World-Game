@@ -1,0 +1,5 @@
+[
+  { "id": "sucata",     "nome": "Sucata",        "cor": "#9aa3ad" },
+  { "id": "materia",    "nome": "Matéria-prima", "cor": "#d8a85a" },
+  { "id": "componente", "nome": "Componente",    "cor": "#46c7e8" }
+]

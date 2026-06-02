@@ -7,7 +7,7 @@ norte AAA, sem depender de "ter tudo pronto".
 |-----|------|---------|--------|
 | 0 | Triagem (semente: processar sucata) | (núcleo) | ✅ jogável (web) |
 | 1 | Pouso e sobrevivência | Subnautica, Ark, Fallout | 🛠️ protótipo jogável |
-| 2 | Automação | Satisfactory | 🔭 |
+| 2 | Automação | Satisfactory | 🛠️ protótipo jogável |
 | 3 | Engenharia e cidade | Space Engineers, Cities Skylines | 🔭 |
 | 4 | Defesa e táticas | CoD, Arma 3/Reforger, Ark | 🔭 |
 | 5 | Civilização e órbita | Fallout, interplanetário | 🔭 |

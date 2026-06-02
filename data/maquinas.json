@@ -1,0 +1,7 @@
+[
+  { "id": "fonte",       "nome": "Fonte de Sucata", "icon": "⛏️", "cor": "#8a8f96", "tipo": "fonte",   "saida": "sucata",                          "intervalo": 1.4, "desc": "Despeja sucata na esteira à frente." },
+  { "id": "esteira",     "nome": "Esteira",         "icon": "➡",  "cor": "#3c4654", "tipo": "esteira",                                                            "desc": "Leva 1 item para a célula à frente." },
+  { "id": "trituradora", "nome": "Trituradora",     "icon": "⚙",  "cor": "#b8893f", "tipo": "maquina", "entrada": { "sucata": 1 },  "saida": "materia",    "tempo": 1.5, "desc": "Sucata → Matéria-prima." },
+  { "id": "montadora",   "nome": "Montadora",       "icon": "🏭", "cor": "#2f8f8f", "tipo": "maquina", "entrada": { "materia": 2 }, "saida": "componente", "tempo": 2.4, "desc": "2 Matéria-prima → 1 Componente." },
+  { "id": "estoque",     "nome": "Estoque",         "icon": "📦", "cor": "#2f9d8f", "tipo": "sink",                                                              "desc": "Recolhe o que chegar (conta a produção)." }
+]

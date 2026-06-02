@@ -5,17 +5,20 @@
  * Projeto-Baluarte, para integrar depois.
  *   - Era 0: Triagem (semente; ui/game.js).
  *   - Era 1: Pouso e Sobrevivência (era1/game.js).
+ *   - Era 2: Automação (era2/game2.js).
  */
 
 import './styles/game.css';
 import './styles/world.css';
 import { validate as validate0 } from './engine/data.js';
 import { validate as validate1 } from './engine/data1.js';
+import { validate as validate2 } from './engine/data2.js';
 import { initGame } from './ui/game.js';
 import { startEra1 } from './era1/game.js';
+import { startEra2 } from './era2/game2.js';
 
 // Em dev, falha barulhento se algum dado quebrar um invariante.
-[['Era 0', validate0], ['Era 1', validate1]].forEach(([nome, fn]) => {
+[['Era 0', validate0], ['Era 1', validate1], ['Era 2', validate2]].forEach(([nome, fn]) => {
   const problems = fn();
   if (problems.length) {
     const msg = `Invariantes ${nome} violados:\n - ` + problems.join('\n - ');
@@ -28,6 +31,7 @@ const scenes = {
   menu: document.getElementById('menu'),
   era0: document.getElementById('era0'),
   era1: document.getElementById('era1'),
+  era2: document.getElementById('era2'),
 };
 function show(name) {
   for (const [k, el] of Object.entries(scenes)) el.classList.toggle('hidden', k !== name);
@@ -35,6 +39,7 @@ function show(name) {
 
 let era0Iniciado = false;
 let era1 = null;
+let era2 = null;
 
 function abrirEra0() {
   show('era0');
@@ -48,8 +53,19 @@ function abrirEra1() {
   era1.onRestart(() => { era1.destroy(); abrirEra1(); });
 }
 
+function abrirEra2() {
+  show('era2');
+  era2 = startEra2(scenes.era2);
+  era2.onMenu(() => { era2.destroy(); era2 = null; show('menu'); });
+  era2.onRestart(() => { era2.destroy(); abrirEra2(); });
+}
+
 document.querySelectorAll('#menu .menu-era').forEach((b) => {
-  b.onclick = () => (b.dataset.era === '1' ? abrirEra1() : abrirEra0());
+  b.onclick = () => {
+    if (b.dataset.era === '1') abrirEra1();
+    else if (b.dataset.era === '2') abrirEra2();
+    else abrirEra0();
+  };
 });
 document.getElementById('era0-menu').onclick = () => show('menu');
 
