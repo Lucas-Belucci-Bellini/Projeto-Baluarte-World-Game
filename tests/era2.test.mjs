@@ -8,12 +8,13 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import { validateEra2 } from '../src/engine/validate2.js';
-import { novaFabrica, colocar, passo, get, PASSO, DIRS, energiaRatio } from '../src/era2/sim.js';
+import { novaFabrica, colocar, passo, get, PASSO, DIRS, energiaRatio, desbloquear } from '../src/era2/sim.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const readJson = (p) => JSON.parse(readFileSync(join(here, '..', 'data', p), 'utf8'));
 const maquinas = readJson('maquinas.json');
 const itens = readJson('itens-fluxo.json');
+const tech = readJson('tech.json');
 const MAQ = Object.fromEntries(maquinas.map((m) => [m.id, m]));
 
 let pass = 0, fail = 0;
@@ -21,14 +22,26 @@ const ok = (c, m) => { if (c) pass++; else { fail++; console.error(`✗ ${m}`); 
 const eq = (a, e, m) => ok(a === e, `${m} (esperado ${e}, veio ${a})`);
 
 /* ===== Invariantes dos dados ===== */
-const problems = validateEra2({ maquinas, itens });
+const problems = validateEra2({ maquinas, itens, tech });
 ok(problems.length === 0, 'invariantes Era 2: ' + (problems.join(' | ') || 'OK'));
-eq(maquinas.length, 9, 'máquinas = 9');
+eq(maquinas.length, 10, 'máquinas = 10');
 eq(itens.length, 5, 'itens de fluxo = 5');
+eq(tech.length, 6, 'tech = 6 desbloqueios');
 eq(DIRS.length, 4, '4 direções');
 ok(PASSO > 0, 'PASSO > 0');
-ok(maquinas.some((m) => m.tipo === 'gerador' && m.geracao > 0), 'existe gerador');
+ok(maquinas.some((m) => m.tipo === 'gerador' && !m.sujo), 'existe gerador limpo');
+ok(maquinas.some((m) => m.tipo === 'gerador' && m.sujo), 'existe queimador (sujo)');
 ok(maquinas.some((m) => m.tipo === 'divisor'), 'existe divisor');
+
+/* ===== Tech: desbloqueios (função pura) ===== */
+{
+  const unlocked = new Set(['fonte', 'esteira', 'trituradora', 'estoque']);
+  ok(desbloquear({ materia: 5 }, tech, unlocked).includes('montadora'), 'montadora desbloqueia com 5 matéria');
+  ok(!desbloquear({ materia: 2 }, tech, unlocked).includes('montadora'), 'montadora não desbloqueia com 2 matéria');
+  ok(desbloquear({ sucata: 6 }, tech, unlocked).includes('queimador'), 'queimador desbloqueia com 6 sucata');
+  unlocked.add('montadora');
+  ok(!desbloquear({ materia: 9 }, tech, unlocked).includes('montadora'), 'não re-desbloqueia o que já tem');
+}
 
 /* ===== Energia (função pura) ===== */
 eq(energiaRatio(10, 4), 1, 'energia sobrando = ratio 1');
@@ -95,6 +108,16 @@ ok(energiaRatio(2, 8) < 0.5, 'pouca energia = ratio baixo');
   d.item = 'sucata'; passo(f, MAQ);
   ok(get(f, 2, 1).item === 'sucata' && get(f, 1, 2).item === 'sucata',
     'divisor distribuiu para frente E lado');
+}
+
+/* ===== Sim F: queimador consome sucata e polui ===== */
+{
+  const f = novaFabrica(5, 3);
+  colocar(f, 0, 1, 'fonte', 1);
+  colocar(f, 1, 1, 'esteira', 1);
+  colocar(f, 2, 1, 'queimador', 1);
+  for (let i = 0; i < 200; i++) passo(f, MAQ);
+  ok((f.poluicao || 0) > 0, `queimador queima sucata e polui (${f.poluicao || 0})`);
 }
 
 console.log(`\n${pass} passou, ${fail} falhou.`);

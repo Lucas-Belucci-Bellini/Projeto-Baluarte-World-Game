@@ -25,7 +25,17 @@ export function energiaRatio(supply, demand) {
 }
 
 export function novaFabrica(cols, rows) {
-  return { cols, rows, cells: new Map(), produced: {} };
+  return { cols, rows, cells: new Map(), produced: {}, poluicao: 0 };
+}
+
+/** Máquinas recém-desbloqueadas dado o que já foi produzido (função pura). */
+export function desbloquear(produced, tech, unlocked) {
+  const novos = [];
+  for (const t of tech) {
+    if (unlocked.has(t.maquina)) continue;
+    if (Object.entries(t.req).every(([it, q]) => (produced[it] || 0) >= q)) novos.push(t.maquina);
+  }
+  return novos;
 }
 
 export function dentro(f, x, y) { return x >= 0 && y >= 0 && x < f.cols && y < f.rows; }
@@ -50,12 +60,13 @@ function aceita(tgt, tdef, item) {
   if (tdef.tipo === 'maquina') {
     return tdef.entrada && tdef.entrada[item] != null && (tgt.inBuf[item] || 0) < tdef.entrada[item] * 3;
   }
-  return false; // fonte/gerador não recebem
+  if (tdef.tipo === 'gerador') return !!tdef.sujo && item === 'sucata' && (tgt.inBuf.sucata || 0) < 12;
+  return false; // fonte / gerador limpo não recebem
 }
 function entrega(f, tgt, tdef, item) {
   if (tdef.tipo === 'esteira' || tdef.tipo === 'divisor') tgt.item = item;
   else if (tdef.tipo === 'sink') f.produced[item] = (f.produced[item] || 0) + 1;
-  else if (tdef.tipo === 'maquina') tgt.inBuf[item] = (tgt.inBuf[item] || 0) + 1;
+  else tgt.inBuf[item] = (tgt.inBuf[item] || 0) + 1; // máquina ou queimador
 }
 
 /** Um passo discreto da simulação. MAQ = mapa de defs por id de construção. */
@@ -64,7 +75,9 @@ export function passo(f, MAQ) {
   let supply = BASE_ENERGIA, demand = 0;
   for (const b of f.cells.values()) {
     const def = MAQ[b.build];
-    if (def && def.tipo === 'gerador') supply += def.geracao || 0;
+    if (!def || def.tipo !== 'gerador') continue;
+    if (def.sujo) { if ((b.inBuf.sucata || 0) > 0) supply += def.geracao || 0; } // só com combustível
+    else supply += def.geracao || 0;
   }
   for (const b of f.cells.values()) {
     const def = MAQ[b.build];
@@ -86,6 +99,12 @@ export function passo(f, MAQ) {
       }
     } else if (def.tipo === 'fonte') {
       if (b.out == null) { b.spawnT -= PASSO; if (b.spawnT <= 0) { b.out = def.saida; b.spawnT = def.intervalo; } }
+    } else if (def.tipo === 'gerador' && def.sujo) {
+      // Queimador: consome 1 sucata por `intervalo` e POLUI.
+      if ((b.inBuf.sucata || 0) > 0) {
+        b.t -= PASSO;
+        if (b.t <= 0) { b.inBuf.sucata -= 1; b.t = def.intervalo; f.poluicao = (f.poluicao || 0) + 1; }
+      }
     }
   }
 

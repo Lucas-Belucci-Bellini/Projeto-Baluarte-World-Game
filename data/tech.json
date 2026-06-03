@@ -1,0 +1,8 @@
+[
+  { "maquina": "queimador", "nome": "Queimador",        "req": { "sucata": 6 } },
+  { "maquina": "montadora",  "nome": "Montadora",         "req": { "materia": 5 } },
+  { "maquina": "gerador",    "nome": "Gerador",           "req": { "componente": 3 } },
+  { "maquina": "divisor",    "nome": "Divisor",           "req": { "componente": 6 } },
+  { "maquina": "forja",      "nome": "Forja",             "req": { "componente": 10 } },
+  { "maquina": "linha",      "nome": "Linha de Módulos",  "req": { "liga": 3 } }
+]

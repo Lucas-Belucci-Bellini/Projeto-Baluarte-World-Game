@@ -251,3 +251,5 @@
 .e2-intro-card .e2-btn { margin-top: 8px; width: 100%; font-size: 16px; padding: 12px; }
 .e2-counts .chip.energia { border-left-color: #caa83a; }
 .e2-counts .chip.energia.baixa { border-left-color: #d23636; color: #ffd2d2; }
+.e2-tool.locked { opacity: 0.4; filter: grayscale(0.6); }
+.e2-counts .chip.pol { border-left-color: #d2683a; color: #ffd2c8; }

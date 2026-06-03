@@ -3,7 +3,7 @@
  * Paleta de construção, contadores de produção, objetivo, tutorial e vitória.
  */
 
-import { MAQUINAS, ITENS } from '../engine/data2.js';
+import { MAQUINAS, ITENS, TECH } from '../engine/data2.js';
 
 const DIR_SETA = ['▲', '▶', '▼', '◀'];
 
@@ -52,7 +52,9 @@ export function createHUD2(container, handlers) {
         <li>⚙ <b>Trituradora</b>: Sucata → Matéria-prima</li>
         <li>🏭 <b>Montadora</b>: 2 Matéria → Componente · 🔩 <b>Forja</b>: 2 Matéria → Liga</li>
         <li>🛠 <b>Linha de Módulos</b>: Componente + Liga → Módulo (avançado)</li>
-        <li>🔋 <b>Gerador</b> dá energia — sem energia, as máquinas desaceleram</li>
+        <li>🔋 <b>Gerador</b> dá energia limpa — sem energia, as máquinas desaceleram</li>
+        <li>🔥 <b>Queimador</b>: energia barata da Sucata, mas <b>POLUI</b> (piora a 2ª chance)</li>
+        <li>🔓 Começa com poucas peças — <b>produza</b> para desbloquear as outras</li>
         <li>📦 <b>Estoque</b> recolhe e conta a produção</li>
       </ul>
       <p class="e2-intro-ctrl">Clique para construir (arraste para fazer linhas). Objetivo em 2 etapas:
@@ -75,7 +77,15 @@ export function createHUD2(container, handlers) {
       <p>Sua linha entregou <b>${state.f.produced.componente || 0} Componentes</b> e
          <b>${state.f.produced.modulo || 0} Módulos</b> sozinha. A automação fecha o ciclo
          da sucata em escala — a colônia pode crescer.</p>
-      <p class="e2-end-stats">Tempo: ${Math.round(state.tempo)}s · pico de ${state.rateMax || 0}/min</p>
+      <div class="e1-report">
+        <div class="row"><span>Tempo</span><b>${Math.round(state.tempo)}s</b></div>
+        <div class="row"><span>Pico de produção</span><b>${state.rateMax || 0}/min</b></div>
+        <div class="row"><span>Poluição (sucata queimada)</span><b>${Math.round(state.f.poluicao || 0)}</b></div>
+        <div class="row"><span>Índice da Segunda Chance</span><b>${Math.round(state.indice || 50)}</b></div>
+      </div>
+      <p class="e2-end-stats">${(state.f.poluicao || 0) > 10
+        ? '⚠️ Muita energia suja — a segunda chance pagou o preço.'
+        : '🌱 Você manteve a fábrica limpa. A segunda chance agradece.'}</p>
       <div class="e2-end-actions">
         <button class="e2-btn" id="e2-retry">↻ Nova fábrica</button>
         <button class="e2-btn ghost" id="e2-tomenu">↩ Menu</button>
@@ -98,10 +108,14 @@ export function createHUD2(container, handlers) {
       `<span class="chip energia${enBaixa ? ' baixa' : ''}">🔋 ${Math.round(en.supply)}/${Math.round(en.demand)}</span>`
       + ITENS.map((it) =>
         `<span class="chip" style="--c:${it.cor}">${it.nome}: <b>${state.f.produced[it.id] || 0}</b></span>`).join('')
+      + ((state.f.poluicao || 0) > 0 ? `<span class="chip pol">🏭 ${Math.round(state.f.poluicao)}</span>` : '')
       + `<span class="chip rate">⚡ ${state.rate || 0}/min</span>`;
     $('#e2-dir').textContent = DIR_SETA[state.dir];
+    const unlocked = state.unlocked || new Set();
     container.querySelectorAll('.e2-tool[data-tool]').forEach((b) => {
-      b.classList.toggle('sel', b.dataset.tool === state.tool);
+      const t = b.dataset.tool;
+      b.classList.toggle('sel', t === state.tool);
+      b.classList.toggle('locked', TECH.some((x) => x.maquina === t) && !unlocked.has(t));
     });
   }
 

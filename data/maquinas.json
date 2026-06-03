@@ -6,6 +6,7 @@
   { "id": "montadora",   "nome": "Montadora",       "icon": "🏭", "cor": "#2f8f8f", "tipo": "maquina", "entrada": { "materia": 2 },                 "saida": "componente", "tempo": 2.2, "consumo": 2,   "desc": "2 Matéria-prima → 1 Componente." },
   { "id": "forja",       "nome": "Forja",           "icon": "🔩", "cor": "#9c6b3f", "tipo": "maquina", "entrada": { "materia": 2 },                 "saida": "liga",       "tempo": 2.2, "consumo": 2,   "desc": "2 Matéria-prima → 1 Liga metálica." },
   { "id": "linha",       "nome": "Linha de Módulos","icon": "🛠", "cor": "#6b6be0", "tipo": "maquina", "entrada": { "componente": 1, "liga": 1 },   "saida": "modulo",     "tempo": 3.0, "consumo": 3,   "desc": "Componente + Liga → Módulo (produto avançado)." },
-  { "id": "gerador",     "nome": "Gerador",         "icon": "🔋", "cor": "#caa83a", "tipo": "gerador", "geracao": 6,                                                              "desc": "Fornece energia para as máquinas rodarem a todo vapor." },
+  { "id": "gerador",     "nome": "Gerador",         "icon": "🔋", "cor": "#caa83a", "tipo": "gerador", "geracao": 6,                                                              "desc": "Energia limpa para as máquinas (sem poluir)." },
+  { "id": "queimador",   "nome": "Queimador",       "icon": "🔥", "cor": "#a8442a", "tipo": "gerador", "sujo": true, "geracao": 8, "intervalo": 1.2,                            "desc": "Queima Sucata por energia: barato, mas POLUI (piora a 2ª chance)." },
   { "id": "estoque",     "nome": "Estoque",         "icon": "📦", "cor": "#2f9d8f", "tipo": "sink",                                                              "desc": "Recolhe o que chegar (conta a produção)." }
 ]

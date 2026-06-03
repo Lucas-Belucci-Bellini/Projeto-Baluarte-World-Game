@@ -4,7 +4,7 @@
  * referenciem itens válidos e que exista a cadeia mínima (fonte→…→estoque).
  */
 
-export function validateEra2({ maquinas, itens }) {
+export function validateEra2({ maquinas, itens, tech = [] }) {
   const problems = [];
   const itemIds = new Set(itens.map((i) => i.id));
   let fonte = 0, esteira = 0, sink = 0, maquina = 0;
@@ -33,6 +33,7 @@ export function validateEra2({ maquinas, itens }) {
       if (m.consumo != null && !(m.consumo >= 0)) problems.push(`Máquina "${m.id}": consumo inválido.`);
     } else if (m.tipo === 'gerador') {
       if (!(m.geracao > 0)) problems.push(`Gerador "${m.id}": geração inválida.`);
+      if (m.sujo && !(m.intervalo > 0)) problems.push(`Queimador "${m.id}": intervalo de queima inválido.`);
     } else {
       problems.push(`Construção "${m.id}": tipo "${m.tipo}" inválido.`);
     }
@@ -42,6 +43,15 @@ export function validateEra2({ maquinas, itens }) {
   if (esteira < 1) problems.push('Falta uma esteira.');
   if (sink < 1) problems.push('Falta um estoque (sink).');
   if (maquina < 1) problems.push('Falta ao menos uma máquina.');
+
+  // Tech: cada desbloqueio referencia máquina e itens válidos.
+  const maqIds = new Set(maquinas.map((m) => m.id));
+  tech.forEach((t) => {
+    if (!maqIds.has(t.maquina)) problems.push(`Tech: máquina "${t.maquina}" inexistente.`);
+    Object.keys(t.req || {}).forEach((it) => {
+      if (!itemIds.has(it)) problems.push(`Tech "${t.maquina}": requisito "${it}" inexistente.`);
+    });
+  });
 
   return problems;
 }

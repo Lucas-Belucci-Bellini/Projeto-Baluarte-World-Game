@@ -4,11 +4,13 @@
  * (produzir N Componentes). `startEra2(root)` devolve um teardown().
  */
 
-import { MAQ } from '../engine/data2.js';
-import { novaFabrica, colocar, remover, avancar } from './sim.js';
+import { MAQ, ITEM, TECH } from '../engine/data2.js';
+import { novaFabrica, colocar, remover, avancar, desbloquear } from './sim.js';
 import { render, layout, celulaEm } from './render2.js';
 import { createHUD2 } from './hud2.js';
 import { initAudio, sfx } from '../era1/audio.js';
+
+const INICIAIS = ['fonte', 'esteira', 'trituradora', 'estoque']; // máquinas iniciais
 
 const COLS = 20, ROWS = 12, META_COMP = 12, META_MOD = 4;
 
@@ -22,15 +24,27 @@ export function startEra2(root) {
   const state = {
     f, tool: 'esteira', dir: 1, hover: null,
     meta: { comp: META_COMP, mod: META_MOD }, stage: 1,
+    unlocked: new Set(INICIAIS),
     tempo: 0, rate: 0, rateMax: 0, lastComp: 0, rateTimer: 0,
+    indice: 50, poluicao: 0,
     acc: { t: 0 }, pausado: true, acabou: false,
   };
+
+  const bloqueada = (id) => TECH.some((x) => x.maquina === id) && !state.unlocked.has(id);
+  const reqTexto = (id) => {
+    const t = TECH.find((x) => x.maquina === id);
+    return t ? 'produza ' + Object.entries(t.req).map(([it, q]) => `${q} ${ITEM[it] ? ITEM[it].nome : it}`).join(' + ') : '';
+  };
+  const indiceEra2 = () => Math.max(0, Math.min(100, 50 + (f.produced.modulo || 0) * 3 - Math.floor((f.poluicao || 0) / 2)));
 
   const handlers = { onMenu: null, onRestart: null };
   const hud = createHUD2(hudEl, {
     menu: () => handlers.onMenu && handlers.onMenu(),
     restart: () => handlers.onRestart && handlers.onRestart(),
-    selectTool: (t) => { state.tool = t; },
+    selectTool: (t) => {
+      if (t !== 'remover' && bloqueada(t)) { hud.toast(`🔒 ${MAQ[t] ? MAQ[t].nome : t}: ${reqTexto(t)}`); return; }
+      state.tool = t;
+    },
     rotate: () => { state.dir = (state.dir + 1) % 4; },
   });
   hud.showIntro(() => { state.pausado = false; initAudio(); });
@@ -87,6 +101,9 @@ export function startEra2(root) {
     if (!state.pausado && !state.acabou) {
       avancar(f, MAQ, dt, state.acc);
       state.tempo += dt;
+      state.poluicao = f.poluicao || 0;
+      const novos = desbloquear(f.produced, TECH, state.unlocked);
+      for (const id of novos) { state.unlocked.add(id); hud.toast(`🔓 Desbloqueado: ${MAQ[id] ? MAQ[id].nome : id}`); sfx.build(); }
       state.rateTimer += dt;
       if (state.rateTimer >= 1) {
         const c = f.produced.componente || 0;
@@ -108,6 +125,7 @@ export function startEra2(root) {
   function vencer() {
     if (state.acabou) return;
     state.acabou = true;
+    state.indice = indiceEra2();
     sfx.vitoria();
     hud.showEnd(state);
   }
