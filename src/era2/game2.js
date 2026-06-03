@@ -5,7 +5,7 @@
  */
 
 import { MAQ, ITEM, TECH } from '../engine/data2.js';
-import { novaFabrica, colocar, remover, avancar, desbloquear } from './sim.js';
+import { novaFabrica, colocar, remover, avancar, desbloquear, serializar, restaurar } from './sim.js';
 import { render, layout, celulaEm } from './render2.js';
 import { createHUD2 } from './hud2.js';
 import { initAudio, sfx } from '../era1/audio.js';
@@ -27,8 +27,30 @@ export function startEra2(root) {
     unlocked: new Set(INICIAIS),
     tempo: 0, rate: 0, rateMax: 0, lastComp: 0, rateTimer: 0,
     indice: 50, poluicao: 0,
+    simSpeed: 1, simPausada: false,
     acc: { t: 0 }, pausado: true, acabou: false,
   };
+
+  const SAVE_KEY = 'pbwg-era2-save-v1';
+  function salvar() {
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify({
+        fab: serializar(f), unlocked: [...state.unlocked], stage: state.stage, tempo: state.tempo,
+      }));
+      hud.toast('💾 Fábrica salva.');
+    } catch (e) { hud.toast('Não foi possível salvar.'); }
+  }
+  function carregar() {
+    let d = null;
+    try { d = JSON.parse(localStorage.getItem(SAVE_KEY)); } catch (e) { /* sem save */ }
+    if (!d) { hud.toast('Nenhum save encontrado.'); return; }
+    restaurar(f, d.fab);
+    state.unlocked = new Set(d.unlocked || INICIAIS);
+    state.stage = d.stage || 1;
+    state.tempo = d.tempo || 0;
+    state.acabou = false; state.acc = { t: 0 };
+    hud.toast('📂 Fábrica carregada.');
+  }
 
   const bloqueada = (id) => TECH.some((x) => x.maquina === id) && !state.unlocked.has(id);
   const reqTexto = (id) => {
@@ -46,6 +68,10 @@ export function startEra2(root) {
       state.tool = t;
     },
     rotate: () => { state.dir = (state.dir + 1) % 4; },
+    save: () => salvar(),
+    load: () => carregar(),
+    pause: () => { state.simPausada = !state.simPausada; },
+    speed: () => { state.simSpeed = state.simSpeed === 1 ? 2 : 1; },
   });
   hud.showIntro(() => { state.pausado = false; initAudio(); });
 
@@ -98,9 +124,9 @@ export function startEra2(root) {
     let dt = (now - last) / 1000; last = now;
     if (dt > 0.1) dt = 0.1;
 
-    if (!state.pausado && !state.acabou) {
-      avancar(f, MAQ, dt, state.acc);
-      state.tempo += dt;
+    if (!state.pausado && !state.acabou && !state.simPausada) {
+      avancar(f, MAQ, dt * state.simSpeed, state.acc);
+      state.tempo += dt * state.simSpeed;
       state.poluicao = f.poluicao || 0;
       const novos = desbloquear(f.produced, TECH, state.unlocked);
       for (const id of novos) { state.unlocked.add(id); hud.toast(`🔓 Desbloqueado: ${MAQ[id] ? MAQ[id].nome : id}`); sfx.build(); }

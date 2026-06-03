@@ -12,7 +12,13 @@ export function createHUD2(container, handlers) {
     <div class="e2-top">
       <div class="e2-obj" id="e2-obj">Objetivo…</div>
       <div class="e2-counts" id="e2-counts"></div>
-      <button class="e2-btn ghost" id="e2-menu">↩ Menu</button>
+      <div class="e2-ctrls">
+        <button class="e2-btn ghost" id="e2-pause">⏸</button>
+        <button class="e2-btn ghost" id="e2-speed">x1</button>
+        <button class="e2-btn ghost" id="e2-save">💾</button>
+        <button class="e2-btn ghost" id="e2-load">📂</button>
+        <button class="e2-btn ghost" id="e2-menu">↩ Menu</button>
+      </div>
     </div>
     <div class="e2-palette" id="e2-palette"></div>
     <div class="e2-panel hidden" id="e2-panel"></div>
@@ -23,6 +29,10 @@ export function createHUD2(container, handlers) {
   const panel = $('#e2-panel');
   const toastEl = $('#e2-toast');
   $('#e2-menu').onclick = () => handlers.menu();
+  $('#e2-pause').onclick = () => handlers.pause();
+  $('#e2-speed').onclick = () => handlers.speed();
+  $('#e2-save').onclick = () => handlers.save();
+  $('#e2-load').onclick = () => handlers.load();
 
   // Paleta: máquinas + girar + remover
   const pal = $('#e2-palette');
@@ -111,6 +121,8 @@ export function createHUD2(container, handlers) {
       + ((state.f.poluicao || 0) > 0 ? `<span class="chip pol">🏭 ${Math.round(state.f.poluicao)}</span>` : '')
       + `<span class="chip rate">⚡ ${state.rate || 0}/min</span>`;
     $('#e2-dir').textContent = DIR_SETA[state.dir];
+    $('#e2-pause').textContent = state.simPausada ? '▶' : '⏸';
+    $('#e2-speed').textContent = 'x' + (state.simSpeed || 1);
     const unlocked = state.unlocked || new Set();
     container.querySelectorAll('.e2-tool[data-tool]').forEach((b) => {
       const t = b.dataset.tool;

@@ -253,3 +253,5 @@
 .e2-counts .chip.energia.baixa { border-left-color: #d23636; color: #ffd2d2; }
 .e2-tool.locked { opacity: 0.4; filter: grayscale(0.6); }
 .e2-counts .chip.pol { border-left-color: #d2683a; color: #ffd2c8; }
+.e2-ctrls { display: flex; gap: 6px; flex-wrap: wrap; pointer-events: auto; }
+.e2-ctrls .e2-btn { padding: 7px 9px; }

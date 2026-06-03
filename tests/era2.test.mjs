@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import { validateEra2 } from '../src/engine/validate2.js';
-import { novaFabrica, colocar, passo, get, PASSO, DIRS, energiaRatio, desbloquear } from '../src/era2/sim.js';
+import { novaFabrica, colocar, passo, get, PASSO, DIRS, energiaRatio, desbloquear, serializar, restaurar } from '../src/era2/sim.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const readJson = (p) => JSON.parse(readFileSync(join(here, '..', 'data', p), 'utf8'));
@@ -24,9 +24,10 @@ const eq = (a, e, m) => ok(a === e, `${m} (esperado ${e}, veio ${a})`);
 /* ===== Invariantes dos dados ===== */
 const problems = validateEra2({ maquinas, itens, tech });
 ok(problems.length === 0, 'invariantes Era 2: ' + (problems.join(' | ') || 'OK'));
-eq(maquinas.length, 10, 'máquinas = 10');
+eq(maquinas.length, 12, 'máquinas = 12');
 eq(itens.length, 5, 'itens de fluxo = 5');
-eq(tech.length, 6, 'tech = 6 desbloqueios');
+eq(tech.length, 8, 'tech = 8 desbloqueios');
+ok(maquinas.some((m) => m.id === 'trituradora2' && m.tempo < 1), 'existe Trituradora Mk2 (mais rápida)');
 eq(DIRS.length, 4, '4 direções');
 ok(PASSO > 0, 'PASSO > 0');
 ok(maquinas.some((m) => m.tipo === 'gerador' && !m.sujo), 'existe gerador limpo');
@@ -118,6 +119,25 @@ ok(energiaRatio(2, 8) < 0.5, 'pouca energia = ratio baixo');
   colocar(f, 2, 1, 'queimador', 1);
   for (let i = 0; i < 200; i++) passo(f, MAQ);
   ok((f.poluicao || 0) > 0, `queimador queima sucata e polui (${f.poluicao || 0})`);
+}
+
+/* ===== Sim G: salvar e carregar (round-trip) ===== */
+{
+  const f = novaFabrica(6, 4);
+  colocar(f, 0, 0, 'fonte', 1);
+  colocar(f, 1, 0, 'esteira', 2);
+  colocar(f, 2, 2, 'estoque', 0);
+  f.produced = { sucata: 5, componente: 2 };
+  f.poluicao = 3;
+  const dados = serializar(f);
+  const g = novaFabrica(2, 2);
+  restaurar(g, dados);
+  eq(g.cols, 6, 'restaura cols');
+  eq([...g.cells.values()].length, 3, 'restaura 3 construções');
+  eq(g.produced.sucata, 5, 'restaura produção');
+  eq(g.poluicao, 3, 'restaura poluição');
+  const fonte = get(g, 0, 0);
+  ok(fonte && fonte.build === 'fonte' && fonte.dir === 1, 'restaura build e direção');
 }
 
 console.log(`\n${pass} passou, ${fail} falhou.`);

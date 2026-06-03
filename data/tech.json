@@ -1,8 +1,10 @@
 [
-  { "maquina": "queimador", "nome": "Queimador",        "req": { "sucata": 6 } },
-  { "maquina": "montadora",  "nome": "Montadora",         "req": { "materia": 5 } },
-  { "maquina": "gerador",    "nome": "Gerador",           "req": { "componente": 3 } },
-  { "maquina": "divisor",    "nome": "Divisor",           "req": { "componente": 6 } },
-  { "maquina": "forja",      "nome": "Forja",             "req": { "componente": 10 } },
-  { "maquina": "linha",      "nome": "Linha de Módulos",  "req": { "liga": 3 } }
+  { "maquina": "queimador",    "nome": "Queimador",          "req": { "sucata": 6 } },
+  { "maquina": "montadora",    "nome": "Montadora",          "req": { "materia": 5 } },
+  { "maquina": "gerador",      "nome": "Gerador",            "req": { "componente": 3 } },
+  { "maquina": "divisor",      "nome": "Divisor",            "req": { "componente": 6 } },
+  { "maquina": "forja",        "nome": "Forja",              "req": { "componente": 10 } },
+  { "maquina": "trituradora2", "nome": "Trituradora Mk2",    "req": { "materia": 20 } },
+  { "maquina": "montadora2",   "nome": "Montadora Mk2",      "req": { "componente": 15 } },
+  { "maquina": "linha",        "nome": "Linha de Módulos",   "req": { "liga": 3 } }
 ]

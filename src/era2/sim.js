@@ -155,3 +155,21 @@ export function avancar(f, MAQ, dt, acc) {
   let n = 0;
   while (acc.t >= PASSO && n < 8) { passo(f, MAQ); acc.t -= PASSO; n++; }
 }
+
+/** Serializa o layout + progresso da fábrica (para salvar). */
+export function serializar(f) {
+  const cells = [];
+  for (const b of f.cells.values()) cells.push({ x: b.x, y: b.y, build: b.build, dir: b.dir });
+  return { cols: f.cols, rows: f.rows, cells, produced: { ...f.produced }, poluicao: f.poluicao || 0 };
+}
+
+/** Restaura uma fábrica a partir de dados serializados (limpa o estado atual). */
+export function restaurar(f, dados) {
+  f.cells.clear();
+  if (dados.cols) f.cols = dados.cols;
+  if (dados.rows) f.rows = dados.rows;
+  f.produced = { ...(dados.produced || {}) };
+  f.poluicao = dados.poluicao || 0;
+  for (const c of (dados.cells || [])) colocar(f, c.x, c.y, c.build, c.dir);
+  return f;
+}
