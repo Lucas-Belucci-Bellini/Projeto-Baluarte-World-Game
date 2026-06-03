@@ -55,7 +55,9 @@ export function createHUD2(container, handlers) {
         <li>🔋 <b>Gerador</b> dá energia — sem energia, as máquinas desaceleram</li>
         <li>📦 <b>Estoque</b> recolhe e conta a produção</li>
       </ul>
-      <p class="e2-intro-ctrl">Clique numa célula para construir a peça selecionada. Objetivo: produzir <b>${(lastState && lastState.meta) || 20} Componentes</b>.</p>
+      <p class="e2-intro-ctrl">Clique para construir (arraste para fazer linhas). Objetivo em 2 etapas:
+        <b>${(lastState && lastState.meta && lastState.meta.comp) || 12} Componentes</b> →
+        depois <b>${(lastState && lastState.meta && lastState.meta.mod) || 4} Módulos</b>.</p>
       <button class="e2-btn" id="e2-start">Ligar a fábrica →</button>
     </div>`;
     $('#e2-start').onclick = () => { intro.classList.add('hidden'); onStart(); };
@@ -69,9 +71,10 @@ export function createHUD2(container, handlers) {
   function showEnd(state) {
     panel.classList.remove('hidden');
     panel.innerHTML = `<div class="e2-end">
-      <h2>🏭 Linha funcionando!</h2>
-      <p>Sua fábrica produziu <b>${state.f.produced.componente || 0} Componentes</b> sozinha.
-         A automação fecha o ciclo da sucata em escala — a colônia pode crescer.</p>
+      <h2>🏭 Fábrica completa!</h2>
+      <p>Sua linha entregou <b>${state.f.produced.componente || 0} Componentes</b> e
+         <b>${state.f.produced.modulo || 0} Módulos</b> sozinha. A automação fecha o ciclo
+         da sucata em escala — a colônia pode crescer.</p>
       <p class="e2-end-stats">Tempo: ${Math.round(state.tempo)}s · pico de ${state.rateMax || 0}/min</p>
       <div class="e2-end-actions">
         <button class="e2-btn" id="e2-retry">↻ Nova fábrica</button>
@@ -85,7 +88,10 @@ export function createHUD2(container, handlers) {
   function update(state) {
     lastState = state;
     const comp = state.f.produced.componente || 0;
-    $('#e2-obj').textContent = `🎯 Produza ${state.meta} Componentes: ${Math.min(comp, state.meta)}/${state.meta}`;
+    const mod = state.f.produced.modulo || 0;
+    $('#e2-obj').textContent = state.stage === 1
+      ? `🎯 Etapa 1 — ${state.meta.comp} Componentes: ${Math.min(comp, state.meta.comp)}/${state.meta.comp}`
+      : `🎯 Etapa 2 — ${state.meta.mod} Módulos: ${Math.min(mod, state.meta.mod)}/${state.meta.mod}`;
     const en = state.f.energia || { supply: 0, demand: 0 };
     const enBaixa = en.demand > en.supply + 0.01;
     $('#e2-counts').innerHTML =

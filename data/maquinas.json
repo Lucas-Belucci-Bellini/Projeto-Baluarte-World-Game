@@ -1,6 +1,7 @@
 [
   { "id": "fonte",       "nome": "Fonte de Sucata", "icon": "⛏️", "cor": "#8a8f96", "tipo": "fonte",   "saida": "sucata",                          "intervalo": 1.3, "desc": "Despeja sucata na esteira à frente." },
   { "id": "esteira",     "nome": "Esteira",         "icon": "➡",  "cor": "#3c4654", "tipo": "esteira",                                                            "desc": "Leva 1 item para a célula à frente (gire com R)." },
+  { "id": "divisor",     "nome": "Divisor",         "icon": "🔀", "cor": "#4a5a6a", "tipo": "divisor",                                                            "desc": "Divide o fluxo entre frente e lados (em rodízio)." },
   { "id": "trituradora", "nome": "Trituradora",     "icon": "⚙",  "cor": "#b8893f", "tipo": "maquina", "entrada": { "sucata": 1 },                  "saida": "materia",    "tempo": 1.4, "consumo": 1.5, "desc": "Sucata → Matéria-prima." },
   { "id": "montadora",   "nome": "Montadora",       "icon": "🏭", "cor": "#2f8f8f", "tipo": "maquina", "entrada": { "materia": 2 },                 "saida": "componente", "tempo": 2.2, "consumo": 2,   "desc": "2 Matéria-prima → 1 Componente." },
   { "id": "forja",       "nome": "Forja",           "icon": "🔩", "cor": "#9c6b3f", "tipo": "maquina", "entrada": { "materia": 2 },                 "saida": "liga",       "tempo": 2.2, "consumo": 2,   "desc": "2 Matéria-prima → 1 Liga metálica." },

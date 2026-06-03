@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import { validateEra2 } from '../src/engine/validate2.js';
-import { novaFabrica, colocar, passo, PASSO, DIRS, energiaRatio } from '../src/era2/sim.js';
+import { novaFabrica, colocar, passo, get, PASSO, DIRS, energiaRatio } from '../src/era2/sim.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const readJson = (p) => JSON.parse(readFileSync(join(here, '..', 'data', p), 'utf8'));
@@ -23,11 +23,12 @@ const eq = (a, e, m) => ok(a === e, `${m} (esperado ${e}, veio ${a})`);
 /* ===== Invariantes dos dados ===== */
 const problems = validateEra2({ maquinas, itens });
 ok(problems.length === 0, 'invariantes Era 2: ' + (problems.join(' | ') || 'OK'));
-eq(maquinas.length, 8, 'máquinas = 8');
+eq(maquinas.length, 9, 'máquinas = 9');
 eq(itens.length, 5, 'itens de fluxo = 5');
 eq(DIRS.length, 4, '4 direções');
 ok(PASSO > 0, 'PASSO > 0');
 ok(maquinas.some((m) => m.tipo === 'gerador' && m.geracao > 0), 'existe gerador');
+ok(maquinas.some((m) => m.tipo === 'divisor'), 'existe divisor');
 
 /* ===== Energia (função pura) ===== */
 eq(energiaRatio(10, 4), 1, 'energia sobrando = ratio 1');
@@ -81,6 +82,19 @@ ok(energiaRatio(2, 8) < 0.5, 'pouca energia = ratio baixo');
   colocar(f, 6, 1, 'estoque', 1);
   for (let i = 0; i < 500; i++) passo(f, MAQ);
   ok((f.produced.liga || 0) >= 1, `cadeia da Forja produz Liga (${f.produced.liga || 0})`);
+}
+
+/* ===== Sim E: divisor alterna entre frente e lado ===== */
+{
+  const f = novaFabrica(6, 6);
+  colocar(f, 1, 1, 'divisor', 1); // dir = direita
+  colocar(f, 2, 1, 'esteira', 1); // frente; aponta p/ fora → segura o item
+  colocar(f, 1, 2, 'esteira', 2); // lado (baixo); aponta p/ fora → segura o item
+  const d = get(f, 1, 1);
+  d.item = 'sucata'; passo(f, MAQ);
+  d.item = 'sucata'; passo(f, MAQ);
+  ok(get(f, 2, 1).item === 'sucata' && get(f, 1, 2).item === 'sucata',
+    'divisor distribuiu para frente E lado');
 }
 
 console.log(`\n${pass} passou, ${fail} falhou.`);

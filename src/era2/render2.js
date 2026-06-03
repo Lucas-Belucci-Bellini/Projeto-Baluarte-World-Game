@@ -86,10 +86,10 @@ export function render(ctx, f, state) {
   for (const b of f.cells.values()) {
     desenhaConstr(ctx, b, ox + b.x * cs, oy + b.y * cs, cs);
   }
-  // itens (esteira.item ou out de fonte/máquina)
+  // itens (esteira/divisor.item ou out de fonte/máquina)
   for (const b of f.cells.values()) {
     const def = MAQ[b.build]; if (!def) continue;
-    const item = def.tipo === 'esteira' ? b.item : b.out;
+    const item = (def.tipo === 'esteira' || def.tipo === 'divisor') ? b.item : b.out;
     if (item) desenhaItem(ctx, item, ox + b.x * cs, oy + b.y * cs, cs);
   }
 

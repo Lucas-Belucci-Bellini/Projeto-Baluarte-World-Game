@@ -45,15 +45,15 @@ function consome(b, def) {
   for (const [it, q] of Object.entries(def.entrada)) b.inBuf[it] -= q;
 }
 function aceita(tgt, tdef, item) {
-  if (tdef.tipo === 'esteira') return tgt.item == null;
+  if (tdef.tipo === 'esteira' || tdef.tipo === 'divisor') return tgt.item == null;
   if (tdef.tipo === 'sink') return true;
   if (tdef.tipo === 'maquina') {
     return tdef.entrada && tdef.entrada[item] != null && (tgt.inBuf[item] || 0) < tdef.entrada[item] * 3;
   }
-  return false; // fonte não recebe
+  return false; // fonte/gerador não recebem
 }
 function entrega(f, tgt, tdef, item) {
-  if (tdef.tipo === 'esteira') tgt.item = item;
+  if (tdef.tipo === 'esteira' || tdef.tipo === 'divisor') tgt.item = item;
   else if (tdef.tipo === 'sink') f.produced[item] = (f.produced[item] || 0) + 1;
   else if (tdef.tipo === 'maquina') tgt.inBuf[item] = (tgt.inBuf[item] || 0) + 1;
 }
@@ -93,7 +93,28 @@ export function passo(f, MAQ) {
   const moved = new Set();
   for (const b of f.cells.values()) {
     const def = MAQ[b.build];
-    if (!def || def.tipo === 'sink') continue;
+    if (!def || def.tipo === 'sink' || def.tipo === 'gerador') continue;
+
+    // Divisor: distribui em rodízio entre frente, direita e esquerda.
+    if (def.tipo === 'divisor') {
+      if (b.item == null || moved.has(b)) continue;
+      const ordem = [b.dir, (b.dir + 1) % 4, (b.dir + 3) % 4];
+      const rr = b.rr || 0;
+      for (let k = 0; k < 3; k++) {
+        const d = ordem[(rr + k) % 3];
+        const [dx, dy] = DIRS[d];
+        const tgt = get(f, b.x + dx, b.y + dy);
+        if (!tgt || moved.has(tgt)) continue;
+        const tdef = MAQ[tgt.build];
+        if (!tdef || !aceita(tgt, tdef, b.item)) continue;
+        entrega(f, tgt, tdef, b.item);
+        b.item = null; b.rr = (rr + k + 1) % 3;
+        moved.add(b); moved.add(tgt);
+        break;
+      }
+      continue;
+    }
+
     const item = def.tipo === 'esteira' ? b.item : b.out;
     if (item == null || moved.has(b)) continue;
     const [dx, dy] = DIRS[b.dir];

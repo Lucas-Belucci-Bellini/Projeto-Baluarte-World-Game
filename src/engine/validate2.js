@@ -16,6 +16,8 @@ export function validateEra2({ maquinas, itens }) {
       if (!(m.intervalo > 0)) problems.push(`Fonte "${m.id}": intervalo inválido.`);
     } else if (m.tipo === 'esteira') {
       esteira++;
+    } else if (m.tipo === 'divisor') {
+      // transporte; sem campos obrigatórios
     } else if (m.tipo === 'sink') {
       sink++;
     } else if (m.tipo === 'maquina') {

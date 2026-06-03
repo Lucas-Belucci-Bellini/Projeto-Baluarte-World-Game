@@ -10,7 +10,7 @@ import { render, layout, celulaEm } from './render2.js';
 import { createHUD2 } from './hud2.js';
 import { initAudio, sfx } from '../era1/audio.js';
 
-const COLS = 20, ROWS = 12, META = 20;
+const COLS = 20, ROWS = 12, META_COMP = 12, META_MOD = 4;
 
 export function startEra2(root) {
   root.innerHTML = `<canvas class="e2-canvas"></canvas><div class="e2-hud"></div>`;
@@ -20,7 +20,8 @@ export function startEra2(root) {
 
   const f = novaFabrica(COLS, ROWS);
   const state = {
-    f, tool: 'esteira', dir: 1, hover: null, meta: META,
+    f, tool: 'esteira', dir: 1, hover: null,
+    meta: { comp: META_COMP, mod: META_MOD }, stage: 1,
     tempo: 0, rate: 0, rateMax: 0, lastComp: 0, rateTimer: 0,
     acc: { t: 0 }, pausado: true, acabou: false,
   };
@@ -93,7 +94,11 @@ export function startEra2(root) {
         state.lastComp = c; state.rateTimer = 0;
         state.rateMax = Math.max(state.rateMax, state.rate);
       }
-      if ((f.produced.componente || 0) >= state.meta) vencer();
+      if (state.stage === 1 && (f.produced.componente || 0) >= state.meta.comp) {
+        state.stage = 2;
+        hud.toast('✅ Componentes prontos! Agora produza Módulos (Forja + Linha + Gerador).');
+      }
+      if (state.stage === 2 && (f.produced.modulo || 0) >= state.meta.mod) vencer();
     }
 
     render(ctx, f, state);
