@@ -14,9 +14,15 @@
  */
 
 export const PASSO = 0.15; // segundos por passo de simulação
+export const BASE_ENERGIA = 4; // energia "grátis" do módulo de pouso
 export const DIRS = [[0, -1], [1, 0], [0, 1], [-1, 0]]; // cima, direita, baixo, esquerda
 
 const chave = (x, y) => x + ',' + y;
+
+/** Fração de energia disponível (1 = tudo roda a todo vapor). */
+export function energiaRatio(supply, demand) {
+  return demand <= 0 ? 1 : Math.min(1, supply / demand);
+}
 
 export function novaFabrica(cols, rows) {
   return { cols, rows, cells: new Map(), produced: {} };
@@ -54,13 +60,28 @@ function entrega(f, tgt, tdef, item) {
 
 /** Um passo discreto da simulação. MAQ = mapa de defs por id de construção. */
 export function passo(f, MAQ) {
-  // 1) Máquinas e fontes processam.
+  // 0) Energia: oferta (base + geradores) vs demanda (máquinas ativas).
+  let supply = BASE_ENERGIA, demand = 0;
+  for (const b of f.cells.values()) {
+    const def = MAQ[b.build];
+    if (def && def.tipo === 'gerador') supply += def.geracao || 0;
+  }
+  for (const b of f.cells.values()) {
+    const def = MAQ[b.build];
+    if (def && def.tipo === 'maquina' && b.out == null && (b.t > 0 || temEntradas(b, def))) {
+      demand += def.consumo || 0;
+    }
+  }
+  const ratio = energiaRatio(supply, demand);
+  f.energia = { supply, demand, ratio };
+
+  // 1) Máquinas (na velocidade da energia) e fontes processam.
   for (const b of f.cells.values()) {
     const def = MAQ[b.build];
     if (!def) continue;
     if (def.tipo === 'maquina') {
       if (b.out == null) {
-        if (b.t > 0) { b.t -= PASSO; if (b.t <= 0) { b.out = def.saida; b.t = 0; } }
+        if (b.t > 0) { b.t -= PASSO * ratio; if (b.t <= 0) { b.out = def.saida; b.t = 0; } }
         else if (temEntradas(b, def)) { consome(b, def); b.t = def.tempo; }
       }
     } else if (def.tipo === 'fonte') {

@@ -50,7 +50,9 @@ export function createHUD2(container, handlers) {
         <li>⛏️ <b>Fonte</b> despeja Sucata na esteira à frente</li>
         <li>➡ <b>Esteira</b> leva os itens (gire com <b>R</b> para escolher a direção)</li>
         <li>⚙ <b>Trituradora</b>: Sucata → Matéria-prima</li>
-        <li>🏭 <b>Montadora</b>: 2 Matéria-prima → 1 Componente</li>
+        <li>🏭 <b>Montadora</b>: 2 Matéria → Componente · 🔩 <b>Forja</b>: 2 Matéria → Liga</li>
+        <li>🛠 <b>Linha de Módulos</b>: Componente + Liga → Módulo (avançado)</li>
+        <li>🔋 <b>Gerador</b> dá energia — sem energia, as máquinas desaceleram</li>
         <li>📦 <b>Estoque</b> recolhe e conta a produção</li>
       </ul>
       <p class="e2-intro-ctrl">Clique numa célula para construir a peça selecionada. Objetivo: produzir <b>${(lastState && lastState.meta) || 20} Componentes</b>.</p>
@@ -84,8 +86,12 @@ export function createHUD2(container, handlers) {
     lastState = state;
     const comp = state.f.produced.componente || 0;
     $('#e2-obj').textContent = `🎯 Produza ${state.meta} Componentes: ${Math.min(comp, state.meta)}/${state.meta}`;
-    $('#e2-counts').innerHTML = ITENS.map((it) =>
-      `<span class="chip" style="--c:${it.cor}">${it.nome}: <b>${state.f.produced[it.id] || 0}</b></span>`).join('')
+    const en = state.f.energia || { supply: 0, demand: 0 };
+    const enBaixa = en.demand > en.supply + 0.01;
+    $('#e2-counts').innerHTML =
+      `<span class="chip energia${enBaixa ? ' baixa' : ''}">🔋 ${Math.round(en.supply)}/${Math.round(en.demand)}</span>`
+      + ITENS.map((it) =>
+        `<span class="chip" style="--c:${it.cor}">${it.nome}: <b>${state.f.produced[it.id] || 0}</b></span>`).join('')
       + `<span class="chip rate">⚡ ${state.rate || 0}/min</span>`;
     $('#e2-dir').textContent = DIR_SETA[state.dir];
     container.querySelectorAll('.e2-tool[data-tool]').forEach((b) => {

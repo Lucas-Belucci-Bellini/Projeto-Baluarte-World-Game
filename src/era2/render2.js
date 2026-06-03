@@ -46,8 +46,8 @@ function desenhaConstr(ctx, b, x, y, cs) {
     ctx.fillStyle = '#fff'; ctx.font = `${Math.floor(cs * 0.5)}px serif`;
     ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
     ctx.fillText(def.icon, x + cs / 2, y + cs / 2 + 1);
-    if (def.tipo !== 'sink') {
-      // mini-seta de saída no canto
+    if (def.tipo === 'fonte' || def.tipo === 'maquina') {
+      // ponto de saída no lado da frente
       const [dx, dy] = DIRS[b.dir];
       ctx.fillStyle = 'rgba(255,255,255,0.9)';
       ctx.beginPath();

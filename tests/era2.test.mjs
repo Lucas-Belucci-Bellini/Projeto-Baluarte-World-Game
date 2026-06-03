@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 
 import { validateEra2 } from '../src/engine/validate2.js';
-import { novaFabrica, colocar, passo, PASSO, DIRS } from '../src/era2/sim.js';
+import { novaFabrica, colocar, passo, PASSO, DIRS, energiaRatio } from '../src/era2/sim.js';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const readJson = (p) => JSON.parse(readFileSync(join(here, '..', 'data', p), 'utf8'));
@@ -23,10 +23,17 @@ const eq = (a, e, m) => ok(a === e, `${m} (esperado ${e}, veio ${a})`);
 /* ===== Invariantes dos dados ===== */
 const problems = validateEra2({ maquinas, itens });
 ok(problems.length === 0, 'invariantes Era 2: ' + (problems.join(' | ') || 'OK'));
-eq(maquinas.length, 5, 'máquinas = 5');
-eq(itens.length, 3, 'itens de fluxo = 3');
+eq(maquinas.length, 8, 'máquinas = 8');
+eq(itens.length, 5, 'itens de fluxo = 5');
 eq(DIRS.length, 4, '4 direções');
 ok(PASSO > 0, 'PASSO > 0');
+ok(maquinas.some((m) => m.tipo === 'gerador' && m.geracao > 0), 'existe gerador');
+
+/* ===== Energia (função pura) ===== */
+eq(energiaRatio(10, 4), 1, 'energia sobrando = ratio 1');
+eq(energiaRatio(6, 0), 1, 'sem demanda = ratio 1');
+eq(energiaRatio(4, 8), 0.5, 'metade da energia = ratio 0.5');
+ok(energiaRatio(2, 8) < 0.5, 'pouca energia = ratio baixo');
 
 /* ===== Sim A: itens fluem fonte → esteira → esteira → estoque ===== */
 {
@@ -60,6 +67,20 @@ ok(PASSO > 0, 'PASSO > 0');
   colocar(f, 1, 1, 'estoque', 1);
   for (let i = 0; i < 100; i++) passo(f, MAQ);
   ok(!(f.produced.materia > 0), 'trituradora sem sucata não produz nada');
+}
+
+/* ===== Sim D: cadeia da Forja → Liga ===== */
+{
+  const f = novaFabrica(10, 3);
+  colocar(f, 0, 1, 'fonte', 1);
+  colocar(f, 1, 1, 'esteira', 1);
+  colocar(f, 2, 1, 'trituradora', 1); // sucata → materia
+  colocar(f, 3, 1, 'esteira', 1);
+  colocar(f, 4, 1, 'forja', 1);       // 2 materia → liga
+  colocar(f, 5, 1, 'esteira', 1);
+  colocar(f, 6, 1, 'estoque', 1);
+  for (let i = 0; i < 500; i++) passo(f, MAQ);
+  ok((f.produced.liga || 0) >= 1, `cadeia da Forja produz Liga (${f.produced.liga || 0})`);
 }
 
 console.log(`\n${pass} passou, ${fail} falhou.`);

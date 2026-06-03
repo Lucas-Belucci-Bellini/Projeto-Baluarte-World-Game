@@ -28,6 +28,9 @@ export function validateEra2({ maquinas, itens }) {
         if (!itemIds.has(it)) problems.push(`Máquina "${m.id}": entrada "${it}" inexistente.`);
         if (!(Number.isInteger(q) && q > 0)) problems.push(`Máquina "${m.id}": quantidade inválida de "${it}".`);
       });
+      if (m.consumo != null && !(m.consumo >= 0)) problems.push(`Máquina "${m.id}": consumo inválido.`);
+    } else if (m.tipo === 'gerador') {
+      if (!(m.geracao > 0)) problems.push(`Gerador "${m.id}": geração inválida.`);
     } else {
       problems.push(`Construção "${m.id}": tipo "${m.tipo}" inválido.`);
     }
